@@ -1,0 +1,22 @@
+{
+  "name": "node-server",
+  "version": "1.0.0",
+  "description": "A sample Node js app using Express 4",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ruwanganath/sit725-prac2.git"
+  },
+  "author": "Ruwangnath Ramanayake",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ruwanganath/sit725-prac2/issues"
+  },
+  "homepage": "https://github.com/ruwanganath/sit725-prac2#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
