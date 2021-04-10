@@ -23,7 +23,11 @@
     "ibm-watson": "^6.0.4",
     "materialize-css": "^1.0.0-rc.2",
     "mongodb": "^3.6.0",
+<<<<<<< HEAD
     "nodemon": "^2.0.6",
     "request": "^2.88.2"
+=======
+    "nodemon": "^2.0.6"
+>>>>>>> 24b210608b1a426eb79eef47f93524f9f83aa973
   }
 }
