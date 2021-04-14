@@ -1,0 +1,91 @@
+<div class="parkingmap">
+    <div class="suburbpanel">
+        Select Suburb to Change Location
+        <select name="suburbs" id="suburblist">
+            <option value="non"></option>
+            <option value="carlton">Carlton</option>
+            <option value="carltonnorth">Carlton North</option>
+            <option value="docklands">Docklands</option>
+            <option value="eastmelbourne">East Melbourne</option>
+            <option value="flemington">Flemington</option>
+            <option value="kensington">Kensington</option>
+            <option value="melb3000">Melbourne 3000</option>
+            <option value="melb3004">Melbourne 3004</option>
+            <option value="northmelb">North Melbourne</option>
+            <option value="parkville">Parkville</option>
+            <option value="portmelb">Port Melbourne</option>
+            <option value="southwarf">South Warf</option>
+            <option value="southyarra">South Yarra</option>
+            <option value="southbank">SouthBank</option>
+            <option value="westmelb">West Melbourne</option>
+        </select>
+    </div>
+    <div class="mappanel">
+        <div class="googlemapframe">
+           <div id="map"></div>
+        </div>
+
+        <div class="buttonpanel">
+            <button id="btn-refresh" class="waves-effect waves-light btn center" type="submit">Refresh</button>
+            <button id="btn-backdash" class="waves-effect waves-light btn center" type="submit">Dashboard</button>
+        </div>
+    </div>
+    <div class="midpanel">
+        <div class="listpanel">
+            <div class="parkinglistpanel">
+                <p class="listtitle">Available Parking</p>
+                <p><img src="images/on.png"/>On-street</p>                
+                <p> <img src="images/off.png"/>Off-street</p>
+                <p> <img src="images/opt.png"/>Best spot </p>
+            
+                <table>
+                    <tr>
+                        <th>No</th>
+                        <th>Type</th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td><img src="images/opt.png"/></td>
+                        <td> <button id="btn-info" class="waves-effect waves-light btn center" type="submit">Info</button></td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td><img src="images/on.png"/></td>
+                        <td> <button id="btn-info" class="waves-effect waves-light btn center" type="submit">Info</button></td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td><img src="images/on.png"/></td>
+                        <td> <button id="btn-info" class="waves-effect waves-light btn center" type="submit">Info</button></td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td><img src="images/off.png"/></td>
+                        <td> <button id="btn-info" class="waves-effect waves-light btn center" type="submit">Info</button></td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td><img src="images/off.png"/></td>
+                        <td> <button id="btn-info" class="waves-effect waves-light btn center" type="submit">Info</button></td>
+                    </tr>
+                    
+                </table>
+            </div>
+        </div>
+        <div class="infopanel">
+            <div class="info">
+                <p class="listno">1</p>
+                <p class="bay">Bay ID&nbsp;&nbsp;-&nbsp;<span class="bayno">565</span></p>
+                <p class="rate">Rate per Hour&nbsp;$&nbsp;4.00</p>
+                <p class="timelimit">Time Limit</p>
+                <p class="days">Mon - Sun</p>
+                <p class="times">7.30 AM - 6.30 PM - 4P</p>
+                <p class="days">Sat</p>
+                <p class="times">10 AM - 2 PM - 2P</p>
+            </div>
+            <button id="btn-navigate" class="waves-effect waves-light btn center" type="submit">Navigate</button>
+        </div>          
+      
+    </div>
+</div>

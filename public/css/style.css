@@ -1,0 +1,570 @@
+/*-------------
+ 	General
+-------------*/
+
+*{
+	margin: 0;
+	padding: 0;
+}
+
+html{
+	font: normal 16px sans-serif;
+	color: #555;
+}
+
+body{
+	background-color: #114F5C;
+}
+
+main{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 40px 30px;
+	left: 0;
+	width: 100%;
+	height: 545px;
+	background-color: #2196F3;
+	background-size: cover;
+	background-image:url(../images/bg.jpg);
+}
+
+
+
+ul.grid{
+	width: 100%;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
+.row{
+	margin: 0px;
+}
+
+.btn:hover{
+	color: rgb(4, 226, 255);
+}
+/*-------------
+ 	Header
+-------------*/
+
+header{
+	left: 0;
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	color: #fff;
+	background-color: #ffffff;
+	margin: 20px 0;
+}
+
+header nav{
+	display: flex;
+}
+
+header nav li{
+	margin: 0 15px;
+	font-family: Arial;
+	font-size: 21px;
+	font-weight: 400;
+	text-align: center;
+	color: #114F5C;
+	list-style: none;
+}
+
+header h3{
+	font-family: Arial;
+	font-size: 32px;
+	font-weight: 700;
+	color: #808080;
+}
+
+header span{
+	width: 112px;
+	height: 28px;
+	font-family: Arial;
+	font-size: 24px;
+	font-weight: 400;
+	font-style: italic;
+	text-align: center;
+	color: #808080;
+	margin-left: -330px;
+    margin-top: 45px;
+}
+
+header .header-btn{
+	width: 55px;
+	height: 40px;
+}
+
+@media (max-width: 1000px){
+	header{
+		padding: 0px 50px;
+	}
+}
+
+
+@media (max-width: 700px){
+	main{
+		padding: 10px 5px;
+
+	}
+	header{
+		flex-direction: column;		
+	}
+	
+	header span{
+		margin-left: 230px;
+		margin-top: -10px;
+		font-size: 18px;
+	}
+	header h3{
+		font-size: 20px;
+	}
+
+	header .header-btn {
+		width: 35px;
+		height: 25px;
+	}
+	
+	header nav {
+		margin-left: -260px;
+	}
+
+	header nav li {
+		font-size: 13px;
+	}
+}
+
+
+
+/*-----------------------------------------------
+ 	signin/dash/register/sendpassword
+-----------------------------------------------*/
+
+.signin, .dash, .register, .sendpassword, .changepassword{
+	position: relative;
+	width: 274px;
+	opacity: 0.9;
+	font-family: Arial;
+	font-size: 13px;
+	font-weight: 400;
+	text-align: center;
+	line-height: 18px;
+	color: #333333;
+	background-color: #FFFFFF;
+	background-repeat: repeat;
+	background-position: left top;
+	border: 3px solid #114F5C;
+	border-radius: 6px;
+	padding: 10px;
+}
+
+.signin h1, .dash h1, .register h1, .sendpassword h1, .changepassword h1{
+	font: bold 60px 'Open Sans', sans-serif;
+	margin-bottom: 15px;
+}
+
+.signin h3, .dash h3, .register h3 , .sendpassword h3, .changepassword h3{
+	font: normal 28px 'Open Sans', sans-serif;
+	margin-bottom: 40px;
+}
+
+.signin h5, .dash h5, .register h5, .sendpassword h5, .changepassword h5{
+	margin: 5px 0 10px 0;
+}
+
+.signin a.btn, .dash a.btn, .register a.btn, .sendpassword a.btn , .changepassword a.btn{
+	padding: 20px 46px;
+} 
+
+.signin img, .dash img, .register img, .sendpassword img, .changepassword img{
+	width: 85px;
+	height: 70px;
+}
+
+.signin input, .dash input, .register input, .sendpassword input, .changepassword input, .navigation input{
+	width: 223px;
+	height: 38px;
+	font-family: Arial;
+	font-size: 14px;
+	font-weight: 200;
+	font-style: italic;
+	text-align: center;
+	line-height: 17px;
+	color: #689999;
+	background-color: #EFEFEF;
+	background-repeat: repeat;
+	background-position: left top;
+	border: 2px solid #689999;
+	border-radius: 6px;
+	padding-left: 5px;
+	margin-bottom: 10px;
+}
+
+.navigation input{
+	height:29px;
+}
+.signin button , .dash button, .register button, .sendpassword button, .changepassword button{
+	width: 228px;
+    height: 40px;
+    color: #FFFFFF;
+    background-color: #114F5C;
+    border: 1px solid #CDCDCD;
+    border-radius: 6px;
+    margin-left: 12px;
+	margin-bottom: 10px;
+}
+
+.signin a {
+    margin: 15px 0px 0px 132px;
+}
+
+
+
+/*-----------------------------------------------
+ 	parkingmap/navigation
+-----------------------------------------------*/
+.navigation input{
+    width: 75%;
+    display: block;
+    float: left;
+    margin-bottom: 0px;
+}
+
+.parkingmap, .navigation{
+	width: 70%;
+	height: 435px;
+	opacity: 0.96;
+	font-family: Arial;
+	font-size: 13px;
+	font-weight: 400;
+	text-align: center;
+	line-height: 18px;
+	color: #333333;
+	background-color: #FFFFFF;
+	background-repeat: repeat;
+	background-position: left top;
+	border: 3px solid #114F5C;
+	border-radius: 13px;
+	padding: 1px;
+	float: left;
+	display: block;
+}
+
+.suburbpanel{
+    width: 99%;
+    height: 24px;
+    font-size: 11px;
+    color: #114F5C;
+    background-color: #D9D9D9;
+    padding-left: 5px;
+    padding-top: 1px;
+    text-align: right;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+}
+
+.suburbpanel select{
+	margin-left: 5px;
+	font-size: 11px;
+	color: #114F5C;
+	height: 20px;
+	width:100px;
+}
+
+.mappanel{
+	width:70%;
+	height: 94%;
+	margin-top: 2px;
+	display: block;
+	float: left;
+}
+
+.googlemapframe{
+	background-color: forestgreen;
+	height: 87%;
+}
+
+.navgooglemapframe{
+	background-color: forestgreen;
+	height: 99%;
+}
+
+#map {
+    height: 100%;
+  }
+
+.midpanel{
+	height: 94%;
+	width: 30%;
+    font-size: 11px;
+    color: #114F5C;
+    padding-left: 2px;
+	margin-top: 2px;
+    padding-top: 1px;
+	display: block;
+	float: left;
+}
+
+.listpanel{
+    height: 52%;
+    width: 100%;
+    display: block;
+    float: left;
+	padding: 2px;
+}
+
+.navlistpanel{
+    height: 90%;
+    width: 100%;
+    display: block;
+    float: left;
+    padding: 2px;
+    background-color: #D9D9D9;
+    margin-bottom: 4px;
+}
+
+.infopanel{
+	background-color: #D9D9D9;
+	border: #114F5C solid 1px;
+	border-bottom-right-radius: 10px;
+    height: 48%;
+    width: 100%;
+	padding: 2px;
+    float: left;
+    display: block;
+}
+
+.navinfopanel{
+    background-color: #D9D9D9;
+    border-bottom-right-radius: 10px;
+    height: 15%;
+    width: 100%;
+    padding: 2px;
+    float: left;
+    display: block;
+}
+
+.parkinglistpanel{
+height: 59%;
+}
+
+.buttonpanel{
+	height: 40%;
+}
+
+.navbuttonpanel{
+	height: 40%;
+}
+
+.parkingmap button, .navigation button{
+	width: 100%;
+    height: 25px;
+    color: #FFFFFF;
+    background-color: #114F5C;
+    border: 1px solid #CDCDCD;
+    border-radius: 6px;
+	margin-bottom: 2px;
+	font-size: 12px;
+	vertical-align: middle;
+	padding: 0px;
+}
+
+.listno{
+    background-color: #114F5C;
+    height: 22px;
+    width: 20%;
+    color: white;
+    font-weight: 800;
+	display: block;
+	float: left;
+}
+
+.bay{
+    height: 22px;
+    width: 78%;
+    color: #ffffff;
+    font-weight: 800;
+    display: block;
+    float: left;
+    margin-left: 2px;
+    background-color: #114F5C;
+	margin-bottom: 1px;
+}
+.bayno{
+    height: 22px;
+    width: 30px;
+    color:white;
+    font-weight: 800;
+	background-color:114F5C ;
+}
+.rate {
+    border-bottom: #114F5C solid 1px;
+    font-size: 14px;
+	height: 45px;
+    font-weight: 600;
+	padding-right: 20px;
+	margin-bottom: 2px;
+}
+.timelimit, .listtitle{
+	font-size: 12px;
+    font-weight: 600;
+	margin-bottom: 2px;
+	width: 98%;
+}
+.days, .times{
+	margin: 1px;
+}
+
+.info{
+height: 86%;
+}
+
+.navinfo{
+	height: 55%;
+}
+
+
+.parkingmap img, .navigation img{
+	width:15px;
+	height: 15px;
+	margin-left: 4px;
+}
+
+.parkinglistpanel p{
+	margin-bottom: 1px;
+	display: block;
+	float: left;
+}
+
+table {
+	width: 100%;
+}
+
+@media (max-width: 800px){
+	
+/*-----------------------------------------------
+ 	signin/dash/register/sendpassword
+-----------------------------------------------*/
+
+	.signin h1, .dash h1, .register h1, .sendpassword h1, .changepassword h1{
+		font-size: 48px;
+	}
+
+	.signin h3, .dash h3, .register h3, .sendpassword h3, .changepassword h3{
+		font-size: 24px;
+	}
+
+	.signin a.btn , .dash a.btn, .register a.btn, .sendpassword a.btn, .changepassword a.btn{
+		padding: 15px 40px;
+	}
+
+
+/*-----------------------------------------------
+ 	parkingmap/
+-----------------------------------------------*/
+
+	.parkingmap, .navigation{
+		width: 100%;
+		height: 100%;
+	}
+	.suburbpanel select{
+		width:150px;
+	}
+	.mappanel{
+		width:100%;
+		height: 60%;
+	}
+	.midpanel{
+		width: 100%;
+		height: 34%;
+	}
+
+	.listpanel{
+		height: 100%;
+		width: 50%;
+	}
+	
+	.navlistpanel{
+		height: 100%;
+		width: 50%;
+	}
+
+	.infopanel{
+		height: 100%;
+		width: 50%;
+	}
+
+	.navinfopanel{
+		height: 100%;
+		width: 50%;
+	}
+	
+	
+	.parkingmap button, .navigation button{
+		width: 78px;
+		height: 22px;
+		padding: 0px;
+	}
+
+	.buttonpanel, .navbuttonpanel{
+		height: 10%;
+		width:100%;
+		display: block;
+		float:left;
+	}
+	.buttonpanel button, .navbuttonpanel button{
+		height:100%;
+		width:48%;
+	}
+	.parkingmap p, .navigation p{
+		margin-bottom: 1px;
+	}
+
+	.rate{
+		padding: 25px 0px;
+	}
+	.parkingmap img , .navigation img{
+		width: 9px;
+		height: 9px;
+		margin-left: 0px;
+	}
+}
+
+
+
+
+
+
+
+/*-------------
+ 	Footer
+-------------*/
+
+footer{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	color: #fff;
+	padding: 5px 0;
+}
+
+footer p{
+	width: 283px;
+	height: 22px;
+	font-family: Arial;
+	font-size: 16px;
+	font-weight: 200;
+	text-align: center;
+	color:      #FFFFFF;
+	background-repeat: repeat;
+	background-position: left top;
+}
+
+footer p a{
+	color: #fff;
+}

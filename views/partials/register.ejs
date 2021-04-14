@@ -1,0 +1,30 @@
+<div class="register">
+  <img src="images/register.png"/>
+<h5>Register</h5>
+<form id="frm-register" action="/Login" method="POST">
+  <div class="row center">
+    <div class="input-field col s12">
+      <input id="username" type="text" class="validate" name="Username" required placeholder="Username" value=<%= username %>>
+    </div>
+  </div>
+  <div class="row center">
+    <div class="input-field col s12">
+      <input id="email" type="text" class="validate" name="Email" required placeholder="Email" value=<%= email %>>
+    </div>
+  </div>
+  <div class="row center">
+    <div class="input-field col s12">
+      <input id="password" type="password" class="validate" name="Password" required placeholder="Password" value=<%= password %>>
+    </div>
+  </div>
+  <div class="row center">
+    <div class="input-field col s12">
+      <input id="confirmpassword" type="password" class="validate" name="ConfirmPassword" required placeholder="Confirm Password" value=<%= confirmpassword %>>
+    </div>
+  </div>
+  <div class="row center">
+    <button id="btn-register" class="waves-effect waves-light btn center" type="submit">Register</button>
+  </div>
+   <div class="error"><%= message %></div>
+</form>
+</div>

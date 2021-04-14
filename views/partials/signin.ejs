@@ -1,0 +1,23 @@
+<div class="signin">
+  <img src="images/user.png"/>
+<h5>Sign In</h5>
+<form id="frm-signin" action="/Login" method="POST">
+  <div class="row center">
+    <div class="input-field col s12">
+      <input id="username" type="text" class="validate" name="Username" required placeholder="Username" value=<%= username %>>
+    </div>
+  </div>
+  <div class="row center">
+    <div class="input-field col s12">
+      <input id="password" type="password" class="validate" name="Password" required placeholder="Password" value=<%= password %>>
+    </div>
+  </div>
+  <div class="row center">
+    <button id="btn-signin" class="waves-effect waves-light btn center" type="submit">Login</button>
+  </div>
+  <div class="row app-links">
+    <a href="/displaySendPassword">Forgot Password?</a>
+  </div>
+  <div class="error"><%= message %></div>
+</form>
+</div>
