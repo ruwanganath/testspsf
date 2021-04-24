@@ -1,6 +1,16 @@
+
 <a href="/"><img src="images/spsf.png"/></a>
 <h3>Smart Parking Spot Finder</h3>
 <span>Melbourne</span>
 <nav>
-  <li><a href="/"><img class="header-btn" src="images/register.png"/></a>Register</li>
+  <%  if(loggedIn) { %>
+    <li><a href="/signoff"><img class="header-btn" src="images/signoff.png"/>Sign Off</a></li>
+    <% } else { %>
+      <%  if(signIn) { %>
+           <li><a href="/"><img class="header-btn" src="images/user.png"/>Sign In</a></li>
+        <% } else {%>
+          <li><a href="/displayRegister"><img class="header-btn" src="images/register.png"/>Register</a></li>
+    <% } %>
+<%  } %>
 </nav>
+

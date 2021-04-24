@@ -1,7 +1,7 @@
-<div class="parkingmap">
+<div class="parkingmap">   
     <div class="suburbpanel">
         Select Suburb to Change Location
-        <select name="suburbs" id="suburblist">
+        <select name="suburbs" id="suburblist" onselect=showParkingForSuburb() >
             <option value="non"></option>
             <option value="carlton">Carlton</option>
             <option value="carltonnorth">Carlton North</option>
@@ -22,70 +22,73 @@
     </div>
     <div class="mappanel">
         <div class="googlemapframe">
-           <div id="map"></div>
+            <div id="map"></div>
         </div>
-
-        <div class="buttonpanel">
-            <button id="btn-refresh" class="waves-effect waves-light btn center" type="submit">Refresh</button>
-            <button id="btn-backdash" class="waves-effect waves-light btn center" type="submit">Dashboard</button>
-        </div>
+        <form id="frm-parkingmap-buttonpanel" action="/parkingMapRoutesButtonPanel" method="POST">
+            <div class="buttonpanel">
+                <button id="btn-refresh" class="waves-effect waves-light btn center" name="Refresh" value="refresh" type="submit">Refresh</button>
+                <button id="btn-backdash" class="waves-effect waves-light btn center" name="Dashboard" value="dashboard" type="submit">Dashboard</button>
+            </div> 
+        </form>           
     </div>
-    <div class="midpanel">
-        <div class="listpanel">
-            <div class="parkinglistpanel">
-                <p class="listtitle">Available Parking</p>
-                <p><img src="images/on.png"/>On-street</p>                
-                <p> <img src="images/off.png"/>Off-street</p>
-                <p> <img src="images/opt.png"/>Best spot </p>
-            
-                <table>
-                    <tr>
-                        <th>No</th>
-                        <th>Type</th>
-                        <th></th>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td><img src="images/opt.png"/></td>
-                        <td> <button id="btn-info" class="waves-effect waves-light btn center" type="submit">Info</button></td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td><img src="images/on.png"/></td>
-                        <td> <button id="btn-info" class="waves-effect waves-light btn center" type="submit">Info</button></td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td><img src="images/on.png"/></td>
-                        <td> <button id="btn-info" class="waves-effect waves-light btn center" type="submit">Info</button></td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td><img src="images/off.png"/></td>
-                        <td> <button id="btn-info" class="waves-effect waves-light btn center" type="submit">Info</button></td>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td><img src="images/off.png"/></td>
-                        <td> <button id="btn-info" class="waves-effect waves-light btn center" type="submit">Info</button></td>
-                    </tr>
-                    
-                </table>
+    <form id="frm-parkingmap-midpanel" action="/parkingMapRoutesMidPanel" method="POST">
+        <div class="midpanel">
+            <div class="listpanel">
+                <div class="parkinglistpanel">
+                    <p class="listtitle">Available Parking</p>
+                    <p><img src="images/on.png"/>On-street</p>                
+                    <p> <img src="images/off.png"/>Off-street</p>
+                    <p> <img src="images/opt.png"/>Best spot </p>
+                
+                    <table>
+                        <tr>
+                            <th>No</th>
+                            <th>Type</th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td><img src="images/opt.png"/></td>
+                            <td> <button id="btn-info1" class="waves-effect waves-light btn center" name="Info" value="1" type="submit">Info</button></td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td><img src="images/on.png"/></td>
+                            <td> <button id="btn-info2" class="waves-effect waves-light btn center" name="Info" value="2" type="submit">Info</button></td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td><img src="images/on.png"/></td>
+                            <td> <button id="btn-info3" class="waves-effect waves-light btn center" name="Info" value="3" type="submit">Info</button></td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td><img src="images/off.png"/></td>
+                            <td> <button id="btn-info4" class="waves-effect waves-light btn center" name="Info" value="4" type="submit">Info</button></td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td><img src="images/off.png"/></td>
+                            <td> <button id="btn-info5" class="waves-effect waves-light btn center" name="Info" value="5" type="submit">Info</button></td>
+                        </tr>
+                        
+                    </table>
+                </div>
             </div>
+            <div class="infopanel">
+                <div class="info">
+                    <p class="listno">1</p>
+                    <p class="bay">Bay ID&nbsp;&nbsp;-&nbsp;<span class="bayno">565</span></p>
+                    <p class="rate">Rate per Hour&nbsp;$&nbsp;4.00</p>
+                    <p class="timelimit">Time Limit</p>
+                    <p class="days">Mon - Sun</p>
+                    <p class="times">7.30 AM - 6.30 PM - 4P</p>
+                    <p class="days">Sat</p>
+                    <p class="times">10 AM - 2 PM - 2P</p>
+                </div>
+                <button id="btn-navigate" class="waves-effect waves-light btn center" name="Navigate" value="navigate" type="submit">Navigate</button>
+            </div>          
+        
         </div>
-        <div class="infopanel">
-            <div class="info">
-                <p class="listno">1</p>
-                <p class="bay">Bay ID&nbsp;&nbsp;-&nbsp;<span class="bayno">565</span></p>
-                <p class="rate">Rate per Hour&nbsp;$&nbsp;4.00</p>
-                <p class="timelimit">Time Limit</p>
-                <p class="days">Mon - Sun</p>
-                <p class="times">7.30 AM - 6.30 PM - 4P</p>
-                <p class="days">Sat</p>
-                <p class="times">10 AM - 2 PM - 2P</p>
-            </div>
-            <button id="btn-navigate" class="waves-effect waves-light btn center" type="submit">Navigate</button>
-        </div>          
-      
-    </div>
+    </form>
 </div>

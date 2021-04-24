@@ -1,24 +1,25 @@
 <div class="navigation">
     <div class="mappanel">
         <div class="navgooglemapframe">
-
+            <div id="map"></div>
         </div>
-
-        <div class="navbuttonpanel">
-            <button id="btn-backdash" class="waves-effect waves-light btn center" type="submit">Dashboard</button>
-        </div>
+        <form id="frm-parkingmap-buttonpanel1" action="/parkingMapRoutesButtonPanel" method="POST">
+            <div class="navbuttonpanel">
+                <button id="btn-backdash" class="waves-effect waves-light btn center" name="Dashboard" value="dashboard" type="submit">Dashboard</button>
+            </div>
+        </form>
     </div>
     <div class="midpanel">
         <div class="navlistpanel">           
-            <p class="listtitle">Directions to Parking</p>
+            <p class="listtitle">Directions for Parking</p>
         </div>
         <div class="navinfopanel">
             <div class="navinfo">
                 <div class="input-field col s12">
-                    <input id="time" type="text" class="validate" name="Time" required placeholder="Enter Time" value=<%= user %>>
+                    <input id="time" type="text" class="validate" name="Time" placeholder="Enter Time" value=<%= timer %>>
                 </div>  
-                <img src="images/plus.png"/>
-                <img src="images/min.png"/>        
+                <img id="plus" src="images/plus.png"/>
+                <img id="minus" src="images/min.png"/>        
             </div>
             <button id="btn-notify" class="waves-effect waves-light btn center" type="submit">Notify Me</button>
         </div>          

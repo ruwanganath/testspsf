@@ -57,7 +57,7 @@ header{
 	align-items: center;
 	color: #fff;
 	background-color: #ffffff;
-	margin: 20px 0;
+	margin: 10px 0;
 }
 
 header nav{
@@ -72,6 +72,11 @@ header nav li{
 	text-align: center;
 	color: #114F5C;
 	list-style: none;
+}
+
+header nav li a, header nav li a:link, header nav li a:hover{
+	color: #114F5C;
+	text-decoration: none;
 }
 
 header h3{
@@ -202,6 +207,18 @@ header .header-btn{
 	border-radius: 6px;
 	padding-left: 5px;
 	margin-bottom: 10px;
+}
+
+.error{
+	color: #ff0000;
+	font-weight: bold;
+	text-align: center;
+  }
+
+.loggeduser{
+	color: #ffffff;
+    font-weight: bold;
+    margin-bottom: 5px;
 }
 
 .navigation input{
