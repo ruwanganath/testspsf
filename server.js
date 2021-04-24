@@ -9,63 +9,149 @@ var spsfServiceUrl = 'https://spsfservice.mybluemix.net';
 //var spsfServiceUrl = 'http://localhost:8080';
 
 app.use(express.static(__dirname +'/public'));
+//use express boady parser to get view data
+app.use(express.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
 
-app.get('/',function(request,response){
-    response.render('index', {title: 'SPSF - Home', user:'',username:'',password:'',message:''});
-})
-/*
-app.get('/sendUserLocation',function(request,response){
-    let userCoord = encodeURI(resquest.query.text);
-    console.log(userCoord);
-    reqObject ="http://localhost:3000/getNearestNeighbours="+userCoord;
-    req(reqObject,(err,result,neighbours)=>{
-        if(err){
-            return console.log(err);
-        }
-        console.log(result.neighbours)
-        response.end(result.neighbours)
-    });
-})
-*/
+var loggedIn=false;
+var loggedUsername ='';
 
-app.get('/service',function(request,response){
-    reqObject = spsfServiceUrl+"/name?name=Ruwan";
+app.get('/',function(request,response){
+    if(loggedIn){
+        response.render('displayDashboard', {title: 'SPSF - Dashboard',username:loggedUsername,loggedIn:loggedIn, signIn:false});
+
+    }else{
+        response.render('index', {title: 'SPSF - Home', username:loggedUsername,password:'',message:'',loggedIn:loggedIn, signIn:false});
+    }    
+})
+
+app.post('/',function(request,response){
+ 
+    reqObject = spsfServiceUrl+"/authenticate?username="+request.body.Username+"&password="+request.body.Password;
     req(reqObject,(err,result,body)=> {
         if(err){
             return console.log(err);
         }
-        console.log(result.body)
-        response.end(result.body)
+       
+        if(JSON.parse(result.body).authorisation==='true'){
+            loggedIn=true;
+            loggedUsername = request.body.Username;
+            response.render('displayDashboard', {title: 'SPSF - Dashboard',username:loggedUsername,loggedIn:loggedIn, signIn:false});
+        }else{
+            let message=JSON.parse(result.body).message;
+            response.render('index', {title: 'SPSF - Home',username:loggedUsername,password:'',message:message,loggedIn:loggedIn, signIn:false});
+        }              
     });
 })
 
-app.get('/dashboard',function(request,response){
-    response.render('dashboard', {title: 'SPSF - Dashboard',reply:request.query.reply});
-})
-
-app.get('/displayDashboard',function(request,response){
-    response.render('displayDashboard', {title: 'SPSF - Dashboard', user:'',username:'',password:'',message:''});
-})
-
 app.get('/displayRegister',function(request,response){
-    response.render('displayRegister', {title: 'SPSF - Registration', user:'',username:'',email:'',password:'',confirmpassword:'',message:''});
+    if(loggedIn){
+        response.render('displayDashboard', {title: 'SPSF - Dashboard',username:loggedUsername,loggedIn:loggedIn, signIn:false});
+
+    }else{
+        response.render('displayRegister', {title: 'SPSF - Registration', username:loggedUsername,email:'',password:'',confirmpassword:'',message:'',loggedIn:loggedIn, signIn:true});
+    }
+})
+
+app.post('/displayRegister',function(request,response){
+
+    reqObject = spsfServiceUrl+"/register?username="+request.body.Username+"&password="+request.body.Password+"&email="+request.body.Email+"&confirmpassword="+request.body.ConfirmPassword;
+    req(reqObject,(err,result,body)=> {
+        if(err){
+            return console.log(err);
+        }
+
+        if(JSON.parse(result.body).registration ==='true'){
+            response.render('index', {title: 'SPSF - Home', username:loggedUsername,password:'',message:'',loggedIn:loggedIn, signIn:false});
+        }else{
+            let message= JSON.parse(result.body).message;
+            response.render('displayRegister', {title: 'SPSF - Registration', username:loggedUsername,email:'',password:'',confirmpassword:'',message:message,loggedIn:loggedIn, signIn:true});
+        }              
+    });
 })
 
 app.get('/displaySendPassword',function(request,response){
-    response.render('displaySendPassword', {title: 'SPSF - Forgot Password', user:'',email:'',message:''});
+    if(loggedIn){
+        response.render('displayDashboard', {title: 'SPSF - Dashboard',username:loggedUsername,loggedIn:loggedIn, signIn:false});
+
+    }else{
+        response.render('displaySendPassword', {title: 'SPSF - Forgot Password', username:loggedUsername,email:'',message:'',loggedIn:loggedIn, signIn:true});
+    }false
 })
 
-app.get('/displayChangePassword',function(request,response){
-    response.render('displayChangePassword', {title: 'SPSF - Forgot Password', user:'',oldpassword:'',newpassword:'',confirmpassword:'',message:''});
+app.post('/displaySendPassword',function(request,response){
+
+    reqObject = spsfServiceUrl+"/sendpassword?email="+request.body.Email;
+    req(reqObject,(err,result,body)=> {
+        if(err){
+            return console.log(err);
+        }
+
+        if(JSON.parse(result.body).registration ==='true'){
+            response.render('index', {title: 'SPSF - Home', username:loggedUsername,password:'',message:'',loggedIn:loggedIn, signIn:false});
+        }else{
+            let message= JSON.parse(result.body).message;
+            response.render('displaySendPassword', {title: 'SPSF - Forgot Password', username:loggedUsername,email:'',message:message,loggedIn:loggedIn, signIn:true});
+        }              
+    });
 })
 
-app.get('/displayParkingMap',function(request,response){
-    response.render('displayParkingMap', {title: 'SPSF - Parking Availability', user:''});
+app.get('/signoff',function(request,response){
+    loggedIn=false;
+    loggedUsername = '';
+    response.render('index', {title: 'SPSF - Home', username:'',password:'',message:'',loggedIn:loggedIn, signIn:false});
 })
 
-app.get('/displayNavigation',function(request,response){
-    response.render('displayNavigation', {title: 'SPSF - Navigation', user:''});
+app.post('/displayDashboard',function(request,response){
+    if(loggedIn){
+        if(request.body.FindParking==='find'){
+            response.render('displayParkingMap', {title: 'SPSF - Parking Availability', username:loggedUsername,loggedIn:loggedIn, signIn:false});
+        }else if (request.body.FuturePrediction==='prediction'){
+            response.render('displayFuturePrediction', {title: 'SPSF - Future Parking Availability', username:loggedUsername,loggedIn:loggedIn, signIn:false});
+        }else if(request.body.ChangePassword==='change'){
+            response.render('displayChangePassword', {title: 'SPSF - Change Password', username:loggedUsername,oldpassword:'',newpassword:'',confirmpassword:'',message:'',loggedIn:loggedIn, signIn:false});
+        }else if(request.body.ParkingHistory==='history'){
+            response.render('displayParkingHistory', {title: 'SPSF - Parking History', username:loggedUsername,loggedIn:loggedIn, signIn:false});
+        }       
+    }else{
+        response.render('index', {title: 'SPSF - Home', username:loggedUsername,password:'',message:'',loggedIn:loggedIn, signIn:false});
+    }   
+})
+
+app.post('/parkingMapRoutesButtonPanel',function(request,response){
+    if(loggedIn){
+        if(request.body.Refresh==='refresh'){
+            response.render('displayParkingMap', {title: 'SPSF - Parking Availability', username:loggedUsername,loggedIn:loggedIn, signIn:false});
+        }else if (request.body.Dashboard==='dashboard'){
+            response.render('displayDashboard', {title: 'SPSF - Dashboard',username:loggedUsername,loggedIn:loggedIn, signIn:false});
+        }      
+    }else{
+        response.render('index', {title: 'SPSF - Home', username:loggedUsername,password:'',message:'',loggedIn:loggedIn, signIn:false});
+    }   
+})
+
+app.post('/parkingMapRoutesMidPanel',function(request,response){
+    if(loggedIn){
+        if(request.body.Info==='1'){
+            response.render('displayChangePassword', {title: 'SPSF - Change Password', username:loggedUsername,loggedIn:loggedIn, signIn:false});
+        }else if(request.body.Navigate==='navigate'){
+            response.render('displayNavigation', {title: 'SPSF - Display Navigation', username:loggedUsername,loggedIn:loggedIn, timer:'', signIn:false});
+        }       
+    }else{
+        response.render('index', {title: 'SPSF - Home', username:loggedUsername,password:'',message:'',loggedIn:loggedIn, signIn:false});
+    }   
+})
+
+//get all available parking data from the service
+app.get('/getAllAvailableParkingData', function (request,response){
+
+    reqObject = spsfServiceUrl+"/requestAllParkingData";
+    req(reqObject,(err,result,body)=> {
+        if(err){
+            return console.log(err);
+        } 
+        response.send(result.body);
+    })          
 })
 
 app.listen(port);

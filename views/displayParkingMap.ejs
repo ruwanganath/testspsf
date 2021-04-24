@@ -6,11 +6,11 @@
 </head>
 <body>
   <header>
-    <%- include ("partials/header",user) %>
+    <%- include ("partials/header",loggedIn,signIn) %>
   </header>
-
+  <div class="loggeduser">&nbsp;&nbsp;Welcome&nbsp;<%= username %></div>
   <main>
-        <%- include ("partials/parkingMap",user) %>
+        <%- include ("partials/parkingMap",username) %>
   </main>
 
   <footer>
@@ -18,8 +18,7 @@
   </footer>
   <!-- Compiled and minified JavaScript -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSnKCuY8aB13yMh9E765ZyJLV_lJS-TtM&map_ids=6299dfbf98c38a43&callback=initMap"></script>
-  <script src="env.js"></script>
+  <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCrjMOa0vDaQWFf3MkA5K-Ttr6S3lCAGp8&callback=initMap"></script>
   <script src="env.js"></script>
 </body>
 

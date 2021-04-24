@@ -1,18 +1,18 @@
 <div class="dash">
     <img src="images/dash.png"/>
   <h5>Dashboard</h5>
-  <form id="frm-dash" action="/Login" method="POST">
+  <form id="frm-dash" action="/displayDashboard" method="POST">
     <div class="row center">
-        <button id="btn-findparking" class="waves-effect waves-light btn center" type="submit">Find Parking</button>
+        <button id="btn-findparking" class="waves-effect waves-light btn center" name="FindParking" type="submit" value=find>Find Parking</button>
       </div>
     <div class="row center">
-        <button id="btn-futureprediction" class="waves-effect waves-light btn center" type="submit">Future Prediction</button>
+        <button id="btn-futureprediction" class="waves-effect waves-light btn center" name="FuturePrediction" type="submit" value=prediction> Future Prediction</button>
       </div>
     <div class="row center">
-      <button id="btn-changepassword" class="waves-effect waves-light btn center" type="submit">Change Password</button>
+      <button id="btn-changepassword" class="waves-effect waves-light btn center" name="ChangePassword" type="submit" value=change>Change Password</button>
     </div>
     <div class="row center">
-        <button id="btn-parkinghistory" class="waves-effect waves-light btn center" type="submit">Parking History</button>
+        <button id="btn-parkinghistory" class="waves-effect waves-light btn center" name="ParkingHistory" type="submit" value=history>Parking History</button>
       </div>
   </form>
   </div>

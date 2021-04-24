@@ -6,12 +6,12 @@
 </head>
 <body>
   <header>
-    <%- include ("partials/header",user) %>
+    <%- include ("partials/header",loggedIn,signIn) %>
   </header>
-
+  <div class="loggeduser">&nbsp;&nbsp;Welcome&nbsp;<%= username %></div>
   <main>
       <div class="row">        
-        <%- include ("partials/dashboard",username,password,message) %>
+        <%- include ("partials/dashboard") %>
       </div>
   </main>
 
