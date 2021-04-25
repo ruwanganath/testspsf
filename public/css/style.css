@@ -390,7 +390,7 @@ height: 59%;
 	padding: 0px;
 }
 
-.listno{
+#listno{
     background-color: #114F5C;
     height: 22px;
     width: 20%;
@@ -400,7 +400,7 @@ height: 59%;
 	float: left;
 }
 
-.bay{
+#bay{
     height: 22px;
     width: 78%;
     color: #ffffff;
@@ -411,14 +411,14 @@ height: 59%;
     background-color: #114F5C;
 	margin-bottom: 1px;
 }
-.bayno{
+#bayno{
     height: 22px;
     width: 30px;
     color:white;
     font-weight: 800;
 	background-color:114F5C ;
 }
-.rate {
+#rate, #distance {
     border-bottom: #114F5C solid 1px;
     font-size: 14px;
 	height: 45px;
@@ -432,7 +432,7 @@ height: 59%;
 	margin-bottom: 2px;
 	width: 98%;
 }
-.days, .times{
+#descone, #desctwo{
 	margin: 1px;
 }
 
@@ -541,7 +541,7 @@ table {
 		margin-bottom: 1px;
 	}
 
-	.rate{
+	#rate, #distance{
 		padding: 25px 0px;
 	}
 	.parkingmap img , .navigation img{

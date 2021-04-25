@@ -5,8 +5,8 @@ const req = require('request');
 const ejs = require('ejs');
 
 var port = process.env.PORT || 3000;   
-//var spsfServiceUrl = 'https://spsfservice.mybluemix.net';
-var spsfServiceUrl = 'http://localhost:8080';
+var spsfServiceUrl = 'https://spsfservice.us-south.cf.appdomain.cloud/';
+//var spsfServiceUrl = 'http://localhost:8080';
 
 app.use(express.static(__dirname +'/public'));
 //use express boady parser to get view data
@@ -16,6 +16,7 @@ app.set('view engine', 'ejs');
 var loggedIn=false;
 var loggedUsername ='';
 
+//spsf index page to sign in (landing or the signin page)
 app.get('/',function(request,response){
     if(loggedIn){
         response.render('displayDashboard', {title: 'SPSF - Dashboard',username:loggedUsername,loggedIn:loggedIn, signIn:false});
@@ -25,6 +26,7 @@ app.get('/',function(request,response){
     }    
 })
 
+// sign in page after user attempt to sign - process form data
 app.post('/',function(request,response){
  
     reqObject = spsfServiceUrl+"/authenticate?username="+request.body.Username+"&password="+request.body.Password;
@@ -44,6 +46,7 @@ app.post('/',function(request,response){
     });
 })
 
+// get registration form when user try to register
 app.get('/displayRegister',function(request,response){
     if(loggedIn){
         response.render('displayDashboard', {title: 'SPSF - Dashboard',username:loggedUsername,loggedIn:loggedIn, signIn:false});
@@ -53,6 +56,7 @@ app.get('/displayRegister',function(request,response){
     }
 })
 
+// process register form post data to register and send data to service for registration process
 app.post('/displayRegister',function(request,response){
 
     reqObject = spsfServiceUrl+"/register?username="+request.body.Username+"&password="+request.body.Password+"&email="+request.body.Email+"&confirmpassword="+request.body.ConfirmPassword;
@@ -70,6 +74,7 @@ app.post('/displayRegister',function(request,response){
     });
 })
 
+// get forget password page to recover password
 app.get('/displaySendPassword',function(request,response){
     if(loggedIn){
         response.render('displayDashboard', {title: 'SPSF - Dashboard',username:loggedUsername,loggedIn:loggedIn, signIn:false});
@@ -79,6 +84,7 @@ app.get('/displaySendPassword',function(request,response){
     }false
 })
 
+// process password recovery from posted data and ask service to send the recovery email
 app.post('/displaySendPassword',function(request,response){
 
     reqObject = spsfServiceUrl+"/sendpassword?email="+request.body.Email;
@@ -96,12 +102,14 @@ app.post('/displaySendPassword',function(request,response){
     });
 })
 
+// user sign off from the system
 app.get('/signoff',function(request,response){
     loggedIn=false;
     loggedUsername = '';
     response.render('index', {title: 'SPSF - Home', username:'',password:'',message:'',loggedIn:loggedIn, signIn:false});
 })
 
+//process user dashboard funtionality and route the user to the dessired page
 app.post('/displayDashboard',function(request,response){
     if(loggedIn){
         if(request.body.FindParking==='find'){
@@ -118,6 +126,7 @@ app.post('/displayDashboard',function(request,response){
     }   
 })
 
+//refresh parking availability map and bac to dash board handling
 app.post('/parkingMapRoutesButtonPanel',function(request,response){
     if(loggedIn){
         if(request.body.Refresh==='refresh'){
@@ -130,13 +139,13 @@ app.post('/parkingMapRoutesButtonPanel',function(request,response){
     }   
 })
 
+//once user selected the parking this will route the user to navigation page for navigation
 app.post('/parkingMapRoutesMidPanel',function(request,response){
+
     if(loggedIn){
-        if(request.body.Info==='1'){
-            response.render('displayChangePassword', {title: 'SPSF - Change Password', username:loggedUsername,loggedIn:loggedIn, signIn:false});
-        }else if(request.body.Navigate==='navigate'){
-            response.render('displayNavigation', {title: 'SPSF - Display Navigation', username:loggedUsername,loggedIn:loggedIn, timer:'', signIn:false});
-        }       
+        if (request.body.Navigate==='navigate'){
+                response.render('displayNavigation', {title: 'SPSF - Display Navigation', username:loggedUsername,loggedIn:loggedIn, timer:'', signIn:false, navArray:request.body.NavArray, navArrayIndex: request.body.NavArrayIndex});
+            }       
     }else{
         response.render('index', {title: 'SPSF - Home', username:loggedUsername,password:'',message:'',loggedIn:loggedIn, signIn:false});
     }   
