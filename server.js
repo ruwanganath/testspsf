@@ -1,6 +1,10 @@
 var express = require('express');
 app = express();
 
+//initiation of socket instance
+let http = require('http').createServer(app);
+let io = require('socket.io')(http);
+
 const req = require('request');
 const ejs = require('ejs');
 
@@ -15,6 +19,34 @@ app.set('view engine', 'ejs');
 
 var loggedIn=false;
 var loggedUsername ='';
+
+
+//establish the socket connection
+io.on('connection', (socket) => {
+    console.log('a user connected');
+
+    //set the use current location marker for the first time on the map    
+    socket.emit('initiate_user_location', 'user location has been initiated')
+    //set available parking spot markers for the first time on the map    
+    socket.emit('initiate_map', 'map with availabale parking data has been initiated')
+
+    //update user current location every 5 seconds
+    setInterval(()=>{
+        socket.emit('update_user', 'user location hasbeen updated')
+      }, 5000);
+
+    //update parking data every 2 mintues
+    setInterval(()=>{
+      socket.emit('update_map', 'map hasbeen updated with recent available parking data')
+    }, 120000);
+
+    //disconnect the socket
+    socket.on('disconnect', () => {
+        console.log('user disconnected');
+    });  
+});
+
+
 
 //spsf index page to sign in (landing or the signin page)
 app.get('/',function(request,response){
@@ -129,11 +161,9 @@ app.post('/displayDashboard',function(request,response){
 //refresh parking availability map and bac to dash board handling
 app.post('/parkingMapRoutesButtonPanel',function(request,response){
     if(loggedIn){
-        if(request.body.Refresh==='refresh'){
-            response.render('displayParkingMap', {title: 'SPSF - Parking Availability', username:loggedUsername,loggedIn:loggedIn, signIn:false});
-        }else if (request.body.Dashboard==='dashboard'){
+         if (request.body.Dashboard==='dashboard'){
             response.render('displayDashboard', {title: 'SPSF - Dashboard',username:loggedUsername,loggedIn:loggedIn, signIn:false});
-        }      
+            }      
     }else{
         response.render('index', {title: 'SPSF - Home', username:loggedUsername,password:'',message:'',loggedIn:loggedIn, signIn:false});
     }   
@@ -163,5 +193,7 @@ app.get('/getAllAvailableParkingData', function (request,response){
     })          
 })
 
-app.listen(port);
-console.log('Server listening on : '+port);
+
+http.listen(port,()=>{
+    console.log('Server listening on : '+port);
+});

@@ -5,6 +5,7 @@ let userLat = -37.840935;
 let userLong = 144.946457;
 let mapZoom=12;
 
+
 $(document).ready(function () {
 
   $("#suburblist").change(function(){
@@ -75,44 +76,91 @@ $(document).ready(function () {
       mapZoom = 15;
     } 
     initMap()   
-  });
-  
+  }); 
 })
 
-function initMap() {
-   map = new google.maps.Map(document.getElementById("map"), {
-    center: { lat: parseFloat(mapLat), lng: parseFloat(mapLong) },
-    zoom: parseFloat(mapZoom),
-    streetViewControl:false,
+initMap = function () {
+    map = new google.maps.Map(document.getElementById("map"), {
+      center: { lat: parseFloat(mapLat), lng: parseFloat(mapLong) },
+      zoom: parseFloat(mapZoom),
+      streetViewControl:false,
+      mapTypeControl: false,
+      styles:[
+        {
+          featureType: "poi.business",
+          stylers: [{ visibility: "off" }],
+        },
+        {
+          featureType: "transit",
+          elementType: "labels.icon",
+          stylers: [{ visibility: "off" }],
+        },
+      ],
     });
-
     
-  if (navigator.geolocation)
-  {
-    navigator.geolocation.getCurrentPosition(function(position){
-      userLat = position.coords.latitude;
-      userLong = position.coords.longitude;
+
+  let socket = io();
+
+    //listening to initiate user location on the map  using sockets    
+    socket.on('initiate_user_location', (data) => {
+      console.log(data)
+      getUserCurrentLocation(userLat,userLong)
+    })
+
+    //listening to update map with available parking data using sockets    
+    socket.on('initiate_map', (data) => {
+      console.log(data)
+      //updating available parking data
+      getUpdatedAvailableParkingData(userLat,userLong)
+    })
+
+     //listening to update user location on the map  using sockets    
+    socket.on('update_user', (data) => {
+      console.log(data)
+      getUserCurrentLocation(userLat,userLong)
+    })
+
+    //listening to update map with available parking data using sockets    
+    socket.on('update_map', (data) => {
+      console.log(data)
+      //updating available parking data
+      getUpdatedAvailableParkingData(userLat,userLong)
+    })
+ }
+
+
+//seting up user current location on the map function
+ getUserCurrentLocation = function (userLat,userLong){
+
+    if (navigator.geolocation)
+    {
+      navigator.geolocation.getCurrentPosition(function(position){
+        userLat = position.coords.latitude;
+        userLong = position.coords.longitude;
+      });
+      
+    }else{
+      alert('Geo location is not supported');
+    }
+    //setting up user marker
+    let userLatLng = { lat: parseFloat(userLat), lng: parseFloat(userLong)};
+    new google.maps.Marker({
+      position: userLatLng,
+      icon: "/images/yous.png",
+      map,
+      title: 'Your Current Location',            
     });
-    
-  }else{
-    alert('Geo location is not supported');
-  }
-  
-  //user marker
-  let userLatLng = { lat: parseFloat(userLat), lng: parseFloat(userLong)};
-  new google.maps.Marker({
-    position: userLatLng,
-    icon: "/images/yous.png",
-    map,
-    title: 'Your Current Location',            
-  });
+ }
 
+//setting up available parking spot markers on the map function
+getUpdatedAvailableParkingData = function(userLat,userLong){
+ 
   $.ajax({
     url: '/getAllAvailableParkingData',
     method: "GET",
     success: function(data) {
         
-      let arrayNearsetParking = [];
+      let arrayNearestParking = [];
       jsonData = JSON.parse(data);
       var keys = Object.keys(jsonData);
 
@@ -122,7 +170,7 @@ function initMap() {
         opt: { icon: "/images/opt.png"}
       };
 
-     
+    
       keys.forEach(function(key){
           let myLatLng = { lat: parseFloat(jsonData[key].lat), lng: parseFloat(jsonData[key].lon)};
           let custIcon='';
@@ -144,14 +192,13 @@ function initMap() {
       
       arrayNearestParking = getNearestParkingSpots(parseFloat(userLat),parseFloat(userLong),data)
       updateParkingList(arrayNearestParking);
-      console.log(arrayNearestParking)
       updateParkingInfoPanel(arrayNearestParking);
     }
   });
-
 }
 
-function calculateDistance(userLatitude, userLongitude, parkingLat, parkingLon) {
+//function to calculate distance between to geo locations in Kilometers
+ calculateDistance = function (userLatitude, userLongitude, parkingLat, parkingLon) {
   var userRadlLat = Math.PI * userLatitude/180;
   var parkingRadlat = Math.PI * parkingLat/180;
   var theta = userLongitude-parkingLon;
@@ -167,13 +214,16 @@ function calculateDistance(userLatitude, userLongitude, parkingLat, parkingLon) 
   return dist
 }
 
-function sortJsonObjectArrayByKey(array, key){
+//function to sort json object array by a given key value
+sortJsonObjectArrayByKey = function (array, key){
   return array.sort(function(valA, valB) {
   var x = valA[key]; var y = valB[key];
   return ((x < y) ? -1 : ((x > y) ? 1 : 0));
  });
 }
 
+
+//function to convert json to an array
 convertJsonToArray = function (json){
   var arrayOutput = [];
   var keys = Object.keys(json);
@@ -183,7 +233,9 @@ convertJsonToArray = function (json){
   return arrayOutput;
 }
 
-function getNearestParkingSpots(userLatitude,userLongitude,data){
+// create an array to store nearset parking spots and sort by the distance to ascending order
+// nearset parking spot will be on the top of the array
+getNearestParkingSpots = function (userLatitude,userLongitude,data){
 
   let arrayParkingWithDistance= [];
   let jsonData = JSON.parse(data);
@@ -201,10 +253,10 @@ function getNearestParkingSpots(userLatitude,userLongitude,data){
   return arrayParkingWithDistance;
 }
 
-function updateParkingList(array){
+updateParkingList = function (array){
   $("#parking-img1").attr("src","images/opt.png");
   if(array[1].type==='on'){
-   $("#parking-img12").attr("src","images/on.png");
+    $("#parking-img12").attr("src","images/on.png");
   }else{
     $("#parking-img12").attr("src","images/off.png");
   }
@@ -235,7 +287,7 @@ function updateParkingList(array){
 }
 
 
-function updateParkingInfoPanel(array){
+updateParkingInfoPanel = function (array){
 let listNo;
 let bay;
 let rate;
@@ -257,9 +309,8 @@ let descTwo;
     $(".timelimit").text('Parking Infomation(Time/Available Spaces)');
     $("#descone").text(descOne);
     $("#desctwo").text(descTwo);
-
-    $("#navarray").value(array);
-    $("#navarrayindexselected").value(listNo);
+    document.getElementById("navarray").value = JSON.stringify(array[0]);
+    document.getElementById("navarrayindexselected").value = listNo;
   });
   $( "#btn-info2" ).click(function() {
     listNo = '2';
@@ -275,9 +326,8 @@ let descTwo;
     $(".timelimit").text('Parking Infomation(Time/Available Spaces)');
     $("#descone").text(descOne);
     $("#desctwo").text(descTwo);
-
-    $("#navarray").value(array);
-    $("#navarrayindexselected").value(listNo);
+    document.getElementById("navarray").value = JSON.stringify(array[1]);
+    document.getElementById("navarrayindexselected").value = listNo;
   });
   $( "#btn-info3" ).click(function() {
     listNo = '3';
@@ -294,8 +344,8 @@ let descTwo;
     $("#descone").text(descOne);
     $("#desctwo").text(descTwo);
 
-    $("#navarray").value(array);
-    $("#navarrayindexselected").value(listNo);
+    document.getElementById("navarray").value = JSON.stringify(array[2]);
+    document.getElementById("navarrayindexselected").value = listNo;
   });
   $( "#btn-info4" ).click(function() {
     listNo = '4';
@@ -312,8 +362,8 @@ let descTwo;
     $("#descone").text(descOne);
     $("#desctwo").text(descTwo);
 
-    $("#navarray").value(array);
-    $("#navarrayindexselected").value(listNo);
+    document.getElementById("navarray").value = JSON.stringify(array[3]);
+    document.getElementById("navarrayindexselected").value = listNo;
   });
   $( "#btn-info5" ).click(function() {
     listNo = '5';
@@ -330,8 +380,8 @@ let descTwo;
     $("#descone").text(descOne);
     $("#desctwo").text(descTwo);
 
-    $("#navarray").value(array);
-    $("#navarrayindexselected").value(listNo);
+    document.getElementById("navarray").value = JSON.stringify(array[4]);
+    document.getElementById("navarrayindexselected").value = listNo;
   });
 
 }
