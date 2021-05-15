@@ -2,7 +2,8 @@ var express = require('express');
 app = express();
 const req = require('request');
 const ejs = require('ejs');
-
+const passport = require('passport');
+require('../spsf_service/passport')(passport);
 var port = process.env.PORT || 3000;   
 //var spsfServiceUrl = 'https://spsfservice.us-south.cf.appdomain.cloud';
 var spsfServiceUrl = 'http://localhost:8080';
@@ -26,7 +27,13 @@ app.get('/',function(request,response){
 })
 
 // sign in page after user attempt to sign - process form data
-app.post('/',function(request,response){
+app.post('/',
+    function(request,response){
+        passport.authenticate('local', {
+            successRedirect: '/',
+            failureRedirect: '/login',
+            failureFlash: true,
+          })
  
     reqObject = spsfServiceUrl+"/authenticate?username="+request.body.Username+"&password="+request.body.Password;
     req(reqObject,(err,result,body)=> {

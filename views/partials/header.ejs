@@ -4,7 +4,7 @@
 <span>Melbourne</span>
 <nav>
   <%  if(loggedIn) { %>
-    <li><form action="/signoff" method="GET"><button><img class="header-btn" src="images/signoff.png"/></button>Sign Off</form></li>
+    <li><a href="/signoff"><img class="header-btn" src="images/signoff.png"/></a>Sign Off</form></li>
     <% } else { %>
       <%  if(signIn) { %>
            <li><a href="/"><img class="header-btn" src="images/user.png"/>Sign In</a></li>
