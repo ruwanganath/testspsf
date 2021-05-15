@@ -5,8 +5,8 @@ const req = require('request');
 const ejs = require('ejs');
 
 var port = process.env.PORT || 3000;   
-var spsfServiceUrl = 'https://spsfservice.us-south.cf.appdomain.cloud';
-//var spsfServiceUrl = 'http://localhost:8080';
+//var spsfServiceUrl = 'https://spsfservice.us-south.cf.appdomain.cloud';
+var spsfServiceUrl = 'http://localhost:8080';
 
 app.use(express.static(__dirname +'/public'));
 //use express boady parser to get view data
@@ -119,7 +119,16 @@ app.post('/displayDashboard',function(request,response){
         }else if(request.body.ChangePassword==='change'){
             response.render('displayChangePassword', {title: 'SPSF - Change Password', username:loggedUsername,oldpassword:'',newpassword:'',confirmpassword:'',message:'',loggedIn:loggedIn, signIn:false});
         }else if(request.body.ParkingHistory==='history'){
-            response.render('displayParkingHistory', {title: 'SPSF - Parking History', username:loggedUsername,loggedIn:loggedIn, signIn:false});
+            reqObject=spsfServiceUrl+"/getUserHistoryData?username="+loggedUsername;
+            req(reqObject,(err,result,body)=>{
+                if(err)
+                {
+                    return console.log(err);
+                }
+                response.render('displayParkingHistory',{title:"SPSF - Parking History",username:loggedUsername,password:'',message:'',historydata:result.body,loggedIn:loggedIn,signIn:false});
+            })
+
+            //response.render('displayParkingHistory', {title: 'SPSF - Parking History', username:loggedUsername,loggedIn:loggedIn, signIn:false});
         }       
     }else{
         response.render('index', {title: 'SPSF - Home', username:loggedUsername,password:'',message:'',loggedIn:loggedIn, signIn:false});
@@ -151,6 +160,7 @@ app.post('/parkingMapRoutesMidPanel',function(request,response){
     }   
 })
 
+
 //get all available parking data from the service
 app.get('/getAllAvailableParkingData', function (request,response){
 
@@ -161,6 +171,26 @@ app.get('/getAllAvailableParkingData', function (request,response){
         } 
         response.send(result.body);
     })          
+})
+
+// get display parking history data
+app.get('/displayParkingHistory',function(request,response){
+    if(loggedIn)
+    {
+        reqObject=spsfServiceUrl+"/getUserHistoryData?username="+request.body.Username;
+        req(reqObject,(err,result,body)=>{
+            if(err)
+            {
+                return console.log(err);
+            }
+            response.render('displayParkingHistory',{title:"SPSF - Parking History",username:loggedUsername,password:'',message:'',historydata:result.body,loggedIn:loggedIn,signIn:false});
+        })
+        
+    }
+    else
+    {
+        response.render('index', {title: 'SPSF - Home', username:loggedUsername,password:'',message:'',loggedIn:loggedIn, signIn:false});
+    }
 })
 
 app.listen(port);
