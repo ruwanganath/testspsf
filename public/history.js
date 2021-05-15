@@ -5,6 +5,7 @@ let userLat = -37.840935;
 let userLong = 144.946457;
 let mapZoom=12;
 let dup_history_data;
+let marker_array=[]
 
 $(document).ready(function () {
 
@@ -29,7 +30,7 @@ function initMap() {
   // Instantiate a directions service.
   const directionsService = new google.maps.DirectionsService();
   // Create a map and center it on Manhattan.
-  const map = new google.maps.Map(document.getElementById("map"), {
+  map = new google.maps.Map(document.getElementById("map"), {
     zoom: parseFloat(mapZoom),
     center: { lat: parseFloat(mapLat), lng: parseFloat(mapLong) },
     streetViewControl:false,
@@ -39,12 +40,17 @@ function initMap() {
   {
     //console.log(parseFloat(dup_history_data[i]['lat']));
     var hLatLng= new google.maps.LatLng(parseFloat(dup_history_data[i]['lat']),parseFloat(dup_history_data[i]['lon']));
-    new google.maps.Marker({
+    marker=new google.maps.Marker({
       position: hLatLng,
+      icon:'images/opts.png',
+      title: 'Duration: '+dup_history_data[i]['duration'],
       map,
-      label:{fontSize:'10px',text:dup_history_data[i]['bay_id'].toString(),color:'white'},          
+      label:{fontSize:'11px',text:dup_history_data[i]['bay_id'].toString()},         
     });
+    marker_array.push(marker);
   }
+
+  google.maps.event.clearListeners(map);
   /* var myLatLng = new google.maps.LatLng(-37.840935, 144.946457);
   new google.maps.Marker({
     position: myLatLng,
@@ -81,6 +87,15 @@ function initMap() {
   //document.getElementById("end").addEventListener("change", onChangeHandler);
 
   
+}
+
+function zoomTolocation(loc_index)
+{
+  //var bounds=new google.maps.LatLngBounds();
+  //map.fitBounds(bounds);
+  map.setZoom(15);
+  marker_array[loc_index].setTitle('Duration: '+dup_history_data[loc_index]['duration']);
+  map.panTo(marker_array[loc_index].position);
 }
 
 function setHistoryData(historydata)
