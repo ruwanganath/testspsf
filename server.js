@@ -9,8 +9,8 @@ const req = require('request');
 const ejs = require('ejs');
 
 var port = process.env.PORT || 3000;   
-var spsfServiceUrl = 'https://spsfservice.us-south.cf.appdomain.cloud';
-//var spsfServiceUrl = 'http://localhost:8080';
+//var spsfServiceUrl = 'https://spsfservice.us-south.cf.appdomain.cloud';
+var spsfServiceUrl = 'http://localhost:8080';
 
 app.use(express.static(__dirname +'/public'));
 //use express boady parser to get view data
@@ -23,21 +23,14 @@ var loggedUsername ='';
 
 //establish the socket connection
 io.on('connection', (socket) => {
-    console.log('a user connected');
+    console.log('A user has connected');
 
-    //set the use current location marker for the first time on the map    
-    socket.emit('initiate_user_location', 'user location has been initiated')
-    //set available parking spot markers for the first time on the map    
-    socket.emit('initiate_map', 'map with availabale parking data has been initiated')
-
-    //update user current location every 5 seconds
-    setInterval(()=>{
-        socket.emit('update_user', 'user location hasbeen updated')
-      }, 5000);
+    //initiate the map
+    socket.emit('initiate_map', 'Map has been initiated')
 
     //update parking data every 2 mintues
     setInterval(()=>{
-      socket.emit('update_map', 'map hasbeen updated with recent available parking data')
+      socket.emit('update_map', 'Map hasbeen updated with recent available parking data')
     }, 120000);
 
     //disconnect the socket
