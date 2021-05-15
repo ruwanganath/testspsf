@@ -1,12 +1,16 @@
 var express = require('express');
 app = express();
 
+//initiation of socket instance
+let http = require('http').createServer(app);
+let io = require('socket.io')(http);
+
 const req = require('request');
 const ejs = require('ejs');
 
 var port = process.env.PORT || 3000;   
-var spsfServiceUrl = 'https://spsfservice.us-south.cf.appdomain.cloud';
-//var spsfServiceUrl = 'http://localhost:8080';
+//var spsfServiceUrl = 'https://spsfservice.us-south.cf.appdomain.cloud';
+var spsfServiceUrl = 'http://localhost:8080';
 
 app.use(express.static(__dirname +'/public'));
 //use express boady parser to get view data
@@ -15,6 +19,27 @@ app.set('view engine', 'ejs');
 
 var loggedIn=false;
 var loggedUsername ='';
+
+
+//establish the socket connection
+io.on('connection', (socket) => {
+    console.log('A user has connected');
+
+    //initiate the map
+    socket.emit('initiate_map', 'Map has been initiated')
+
+    //update parking data every 2 mintues
+    setInterval(()=>{
+      socket.emit('update_map', 'Map hasbeen updated with recent available parking data')
+    }, 120000);
+
+    //disconnect the socket
+    socket.on('disconnect', () => {
+        console.log('user disconnected');
+    });  
+});
+
+
 
 //spsf index page to sign in (landing or the signin page)
 app.get('/',function(request,response){
@@ -138,11 +163,9 @@ app.post('/displayDashboard',function(request,response){
 //refresh parking availability map and bac to dash board handling
 app.post('/parkingMapRoutesButtonPanel',function(request,response){
     if(loggedIn){
-        if(request.body.Refresh==='refresh'){
-            response.render('displayParkingMap', {title: 'SPSF - Parking Availability', username:loggedUsername,loggedIn:loggedIn, signIn:false});
-        }else if (request.body.Dashboard==='dashboard'){
+         if (request.body.Dashboard==='dashboard'){
             response.render('displayDashboard', {title: 'SPSF - Dashboard',username:loggedUsername,loggedIn:loggedIn, signIn:false});
-        }      
+            }      
     }else{
         response.render('index', {title: 'SPSF - Home', username:loggedUsername,password:'',message:'',loggedIn:loggedIn, signIn:false});
     }   
