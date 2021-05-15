@@ -1,6 +1,5 @@
 var express = require('express');
 app = express();
-
 const req = require('request');
 const ejs = require('ejs');
 
@@ -36,6 +35,7 @@ app.post('/',function(request,response){
         }
        
         if(JSON.parse(result.body).authorisation==='true'){
+            console.log(request.isAuth);
             loggedIn=true;
             loggedUsername = request.body.Username;
             response.render('displayDashboard', {title: 'SPSF - Dashboard',username:loggedUsername,loggedIn:loggedIn, signIn:false});
@@ -104,7 +104,7 @@ app.post('/displaySendPassword',function(request,response){
 
 // user sign off from the system
 app.get('/signoff',function(request,response){
-    loggedIn=false;
+    loggedIn=response.loggedIn;
     loggedUsername = '';
     response.render('index', {title: 'SPSF - Home', username:'',password:'',message:'',loggedIn:loggedIn, signIn:false});
 })
