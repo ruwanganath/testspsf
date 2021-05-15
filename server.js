@@ -188,5 +188,5 @@ app.get('/getAllAvailableParkingData', function (request,response){
 
 
 http.listen(port,()=>{
-    console.log('Server listening on : '+port);
+    console.log('Server is listening on :'+port);
 });
