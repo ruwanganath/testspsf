@@ -216,5 +216,6 @@ app.get('/displayParkingHistory',function(request,response){
     }
 })
 
-app.listen(port);
-console.log('Server listening on : '+port);
+http.listen(port,()=>{
+    console.log('Server is listening on :'+port);
+});
