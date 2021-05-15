@@ -40,7 +40,7 @@
     //setHistoryData(history_data);
     //var history_data= '<%= historydata %>';
     history_data=JSON.parse(history_data);
-    var historyHTML="<table class='table table-striped'><tr><th>Bay Id</th><th>Date & Time</th><th>Duration</th></tr>";
+    var historyHTML="<table class='table table-striped'><tr><th>Bay Id</th><th>Date & Time</th><th></th></tr>";
     for(var i=0;i<history_data.length;i++)
     {
         //console.log(history_data[i]['bay_id']);
@@ -48,7 +48,7 @@
         historyHTML+="<tr>";
         historyHTML+="<td>"+history_data[i]['bay_id']+"</td>";
         historyHTML+="<td>"+history_data[i]['datetime']+"</td>";
-        historyHTML+="<td>"+history_data[i]['duration']+"</td>";
+        historyHTML+="<td><button class='waves-effect waves-light btn center' value='navigate' type='submit' onclick='zoomTolocation("+i+")'>View</button></td>";
         historyHTML+="</tr>";
     }
     history_data+="</table>"
