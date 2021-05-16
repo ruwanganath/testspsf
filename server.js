@@ -79,7 +79,7 @@ app.get('/displayRegister',function(request,response){
     }else{
         response.render('displayRegister', {title: 'SPSF - Registration', username:loggedUsername,email:'',password:'',confirmpassword:'',message:'',loggedIn:loggedIn, signIn:true});
     }
-})
+});
 
 // process register form post data to register and send data to service for registration process
 app.post('/displayRegister',function(request,response){
