@@ -214,7 +214,14 @@ app.get('/displayParkingHistory',function(request,response){
     {
         response.render('index', {title: 'SPSF - Home', username:loggedUsername,password:'',message:'',loggedIn:loggedIn, signIn:false});
     }
-})
+});
+
+app.post('/Login', function(request,response){
+    if(request.body.Back ==='back'){
+        response.render('displayDashboard', {title: 'SPSF - Dashboard',username:loggedUsername,loggedIn:loggedIn, signIn:false});
+    }
+});
+
 
 http.listen(port,()=>{
     console.log('Server is listening on :'+port);
