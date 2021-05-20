@@ -188,7 +188,7 @@ getUpdatedAvailableParkingData = function(userLat,userLong){
       jsonData = JSON.parse(data);
       var keys = Object.keys(jsonData);
 
-      keys.forEach(function(key){
+      keys.forEach(function(key,index){
           let myLatLng = { lat: parseFloat(jsonData[key].lat), lng: parseFloat(jsonData[key].lon)};
           let custIcon='';
           if(jsonData[key].type ==='on'){
