@@ -199,13 +199,14 @@ getUpdatedAvailableParkingData = function(userLat,userLong){
             custIcon = "/images/opts.png";
           }
             
+        if(index !==0){    
           new google.maps.Marker({
-            position: myLatLng,
-            icon: custIcon,
-            map,
-            title: 'Bay/Base Property - '+jsonData[key].bay+' - '+jsonData[key].type+'-Street Parking',            
-          });        
-
+              position: myLatLng,
+              icon: custIcon,
+              map,
+              title: 'Bay/Base Property - '+jsonData[key].bay+' - '+jsonData[key].type+'-Street Parking',            
+            });
+          }
           /*
           $.ajax({
             url: calculateDistanceFunctionUrl+"?userLatitude="+userLat+"&userLongitude="+userLong+"&parkingLat="+parseFloat(jsonData[key].lat)+"&parkingLon="+parseFloat(jsonData[key].lon),
