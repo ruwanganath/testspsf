@@ -2,11 +2,11 @@ var express = require('express');
 app = express();
 const req = require('request');
 const ejs = require('ejs');
-const passport = require('passport');
-require('../spsf_service/passport')(passport);
-//var port = process.env.PORT || 3000;   
-var spsfServiceUrl = 'https://spsfservice.us-south.cf.appdomain.cloud';
-//var spsfServiceUrl = 'http://localhost:8080';
+const { request } = require('express');
+
+var port = process.env.PORT || 3000;   
+//var spsfServiceUrl = 'https://spsfservice.us-south.cf.appdomain.cloud';
+var spsfServiceUrl = 'http://localhost:8080';
 
 app.use(express.static(__dirname +'/public'));
 //use express boady parser to get view data
@@ -27,22 +27,16 @@ app.get('/',function(request,response){
 })
 
 // sign in page after user attempt to sign - process form data
-app.post('/',
-    function(request,response){
-        passport.authenticate('local', {
-            successRedirect: '/',
-            failureRedirect: '/login',
-            failureFlash: true,
-          })
+app.post('/', function(request,response){
  
     reqObject = spsfServiceUrl+"/authenticate?username="+request.body.Username+"&password="+request.body.Password;
+
     req(reqObject,(err,result,body)=> {
         if(err){
             return console.log(err);
         }
-       
         if(JSON.parse(result.body).authorisation==='true'){
-            console.log(request.isAuth);
+            console.log('logged in!');
             loggedIn=true;
             loggedUsername = request.body.Username;
             response.render('displayDashboard', {title: 'SPSF - Dashboard',username:loggedUsername,loggedIn:loggedIn, signIn:false});
@@ -59,7 +53,7 @@ app.get('/displayRegister',function(request,response){
         response.render('displayDashboard', {title: 'SPSF - Dashboard',username:loggedUsername,loggedIn:loggedIn, signIn:false});
 
     }else{
-        response.render('displayRegister', {title: 'SPSF - Registration', username:loggedUsername,email:'',password:'',confirmpassword:'',message:'',loggedIn:loggedIn, signIn:true});
+        response.render('displayRegister', {title: 'SPSF - Registration', username:loggedUsername,email:'',password:'',confirmpassword:'',message:'', loggedIn:loggedIn, signIn:true});
     }
 })
 
@@ -110,10 +104,27 @@ app.post('/displaySendPassword',function(request,response){
 })
 
 // user sign off from the system
-app.get('/signoff',function(request,response){
+app.get('/logout',function(request,response){
+    //response.redirect('/');
     loggedIn=response.loggedIn;
     loggedUsername = '';
     response.render('index', {title: 'SPSF - Home', username:'',password:'',message:'',loggedIn:loggedIn, signIn:false});
+    console.log('signed off!');
+});
+
+app.post('/changepassword', function(req, res){
+    reqObject = spsfServiceUrl+"/changepassword?oldpassword"+request.body.OldPassword+"&newpassword"+request.body.NewPassword+"&confirmpassword"+request.body.ConfirmPassword;
+    req(reqObject,(err,result,body)=> {
+        if(err){
+            return console.log(err);
+        }
+        if(JSON.parse(result.body).changed ==='true'){
+            response.render('index', {title: 'SPSF - Home', username:loggedUsername,password:'',message:'',loggedIn:loggedIn, signIn:false});
+        }else{
+            let message= JSON.parse(result.body).message;
+            response.render('displayChangePassword', {title: 'SPSF - Change Password', username:loggedUsername,oldpassword:'',newpassword:'',confirmpassword:'',message:message,loggedIn:loggedIn, signIn:false});
+        }              
+    }); 
 })
 
 //process user dashboard funtionality and route the user to the dessired page
