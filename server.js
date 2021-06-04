@@ -4,10 +4,10 @@ const req = require('request');
 const ejs = require('ejs');
 const passport = require('passport');
 const mongoose = require('mongoose');
-//const session = require('express-session');
+const session = require('express-session');
 const {ensureAuthenticated, forwardAuthenticated} = require('./ensureAuth');
 
-//require('../spsf_service/googleauth');
+//require('../spsf_service/config/googleauth');
 
 var port = process.env.PORT || 3000;   
 //var spsfServiceUrl = 'https://spsfservice.us-south.cf.appdomain.cloud';
@@ -23,10 +23,10 @@ var loggedIn=false;
 var loggedUsername ='';
 
 //passport google 
-// require('./googleauth');
+require('./googleauth');
 
 // try {
-    // Connect to the MongoDB cluster
+//     // Connect to the MongoDB cluster
 //     mongoose.connect(
 //     uri,{ useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true},
 //         () => console.log(" Mongoose is connected...")
@@ -36,16 +36,16 @@ var loggedUsername ='';
 
 
 //express session
-// app.use(session({
-//     secret: "key to cookie",
-//     resave: true,
-//     saveUninitialized: true,
-//   })
-// );
+app.use(session({
+    secret: "key to cookie",
+    resave: true,
+    saveUninitialized: true,
+  })
+);
 
 // Passport middleware
-// app.use(passport.initialize());
-// app.use(passport.session());
+app.use(passport.initialize());
+app.use(passport.session());
 
 //spsf index page to sign in (landing or the signin page)
 app.get('/', (request,response) => {
@@ -217,17 +217,15 @@ app.get('/getAllAvailableParkingData', function (request,response){
     })          
 })
 
-// app.get('/google', (passport.authenticate('google', {scope: 'profile'})));
+app.get('/google', passport.authenticate('google', { scope: ['profile'] }));
 
-// app.get('/google/callback', function(request, response) {
-//     authed= req.authed;
-//     if(authed){
-//         response.render('displayDashboard', {title: 'SPSF - Dashboard',username:loggedUsername,loggedIn:loggedIn, signIn:false});
-
-//     }else{
-//         response.render('index', {title: 'SPSF - Home', username:loggedUsername,password:'',message:'',loggedIn:loggedIn, signIn:false});
-//     }    
-// });
+app.get('/google/callback', function(request, response) {
+    try {
+        response.render('displayDashboard', {title: 'SPSF - Dashboard',username:loggedUsername,loggedIn:loggedIn, signIn:false});
+    } catch (error) {
+        response.render('index', {title: 'SPSF - Home', username:loggedUsername,password:'',message:'',loggedIn:loggedIn, signIn:false}); 
+    }   
+});
 
 app.listen(port);
 console.log('Server listening on : '+port);
