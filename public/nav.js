@@ -17,7 +17,9 @@ $(document).ready(function () {
   }else{
     alert('Geo location is not supported');
   }
-  
+
+  $('.bs-timepicker').timepicker();
+ 
 })
 
 function initMap() {
