@@ -79,7 +79,7 @@ app.get('/displayRegister',function(request,response){
     }else{
         response.render('displayRegister', {title: 'SPSF - Registration', username:loggedUsername,email:'',password:'',confirmpassword:'',message:'',loggedIn:loggedIn, signIn:true});
     }
-})
+});
 
 // process register form post data to register and send data to service for registration process
 app.post('/displayRegister',function(request,response){
@@ -214,7 +214,14 @@ app.get('/displayParkingHistory',function(request,response){
     {
         response.render('index', {title: 'SPSF - Home', username:loggedUsername,password:'',message:'',loggedIn:loggedIn, signIn:false});
     }
-})
+});
+
+app.post('/Login', function(request,response){
+    if(request.body.Back ==='back'){
+        response.render('displayDashboard', {title: 'SPSF - Dashboard',username:loggedUsername,loggedIn:loggedIn, signIn:false});
+    }
+});
+
 
 http.listen(port,()=>{
     console.log('Server is listening on :'+port);
