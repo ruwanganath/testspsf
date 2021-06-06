@@ -6,6 +6,10 @@ let userLong = 144.946457;
 let mapZoom=12;
 let dup_history_data;
 let marker_array=[]
+let directionsDisplay;
+let directionsService;
+
+var selected_loc_index=0
 
 $(document).ready(function () {
 
@@ -28,7 +32,8 @@ $(document).ready(function () {
 function initMap() {
   const markerArray = [];
   // Instantiate a directions service.
-  const directionsService = new google.maps.DirectionsService();
+  directionsService = new google.maps.DirectionsService();
+  directionsDisplay=new google.maps.DirectionsRenderer();
   // Create a map and center it on Manhattan.
   map = new google.maps.Map(document.getElementById("map"), {
     zoom: parseFloat(mapZoom),
@@ -50,7 +55,29 @@ function initMap() {
     marker_array.push(marker);
   }
 
-  google.maps.event.clearListeners(map);
+  selected_loc_index=dup_history_data.length-1;
+
+  //Pointing the current location of the user
+  if (navigator.geolocation)
+    {
+      navigator.geolocation.getCurrentPosition(function(position){
+        userLat = position.coords.latitude;
+        userLong = position.coords.longitude;
+      });
+      
+    }else{
+      alert('Geo location is not supported');
+    }
+
+    let userLatLng = { lat: parseFloat(userLat), lng: parseFloat(userLong)};
+    new google.maps.Marker({
+      position: userLatLng,
+      icon: "/images/yous.png",
+      map,
+      title: 'Your Current Location',            
+    });
+
+  //google.maps.event.clearListeners(map);
   /* var myLatLng = new google.maps.LatLng(-37.840935, 144.946457);
   new google.maps.Marker({
     position: myLatLng,
@@ -96,12 +123,45 @@ function zoomTolocation(loc_index)
   map.setZoom(15);
   marker_array[loc_index].setTitle('Duration: '+dup_history_data[loc_index]['duration']);
   map.panTo(marker_array[loc_index].position);
+  selected_loc_index=loc_index;
 }
 
 function setHistoryData(historydata)
 {
   dup_history_data=historydata;
 }
+
+function navigate_to_location()
+{
+  var start=new google.maps.LatLng(parseFloat(userLat),parseFloat(userLong));
+
+  var end = new google.maps.LatLng(marker_array[selected_loc_index].getPosition().lat(),marker_array[selected_loc_index].getPosition().lng());
+
+  var bounds=new google.maps.LatLngBounds();
+  bounds.extend(start);
+  bounds.extend(end);
+  map.fitBounds(bounds);
+
+  var request={
+    origin: start,
+    destination: end,
+    travelMode: google.maps.TravelMode.DRIVING
+  };
+  directionsService.route(request,function(response,status){
+    if(status==google.maps.DirectionsStatus.OK)
+    {
+      directionsDisplay.setDirections(response);
+      directionsDisplay.setMap(map);
+    }
+    else
+    {
+      console.log("Direction request failed:"+status);
+    }
+
+  });
+
+}
+
 
 function addBayMarker(lat,lon)
 {

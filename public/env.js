@@ -63,10 +63,17 @@ $(document).ready(function () {
     map.panTo({ lat: parseFloat(mapLat), lng: parseFloat(mapLong)}) 
   }); 
 
+  $("#sel_lat").val(mapLat);
+  $("#sel_lon").val(mapLong);
+
   $( "#btn-info1" ).click(function() {
     setTimeout(()=>{
       mapLong = document.getElementById("info1-lon").value
       mapLat = document.getElementById("info1-lat").value
+
+      $("#sel_lat").val(mapLat);
+      $("#sel_lon").val(mapLong);
+
       map.zoom = 15;
       map.panTo({ lat: parseFloat(mapLat), lng: parseFloat(mapLong)}) 
     }, 1000);   
@@ -75,6 +82,10 @@ $(document).ready(function () {
     setTimeout(()=>{
       mapLong = document.getElementById("info2-lon").value
       mapLat = document.getElementById("info2-lat").value
+
+      $("#sel_lat").val(mapLat);
+      $("#sel_lon").val(mapLong);
+
       map.zoom = 15;
     map.panTo({ lat: parseFloat(mapLat), lng: parseFloat(mapLong)}) 
     }, 1000);  
@@ -83,6 +94,10 @@ $(document).ready(function () {
     setTimeout(()=>{
       mapLong = document.getElementById("info3-lon").value
       mapLat = document.getElementById("info3-lat").value
+
+      $("#sel_lat").val(mapLat);
+      $("#sel_lon").val(mapLong);
+
       map.zoom = 15;
       map.panTo({ lat: parseFloat(mapLat), lng: parseFloat(mapLong)}) 
     }, 1000);  
@@ -91,6 +106,10 @@ $(document).ready(function () {
     setTimeout(()=>{
       mapLong = document.getElementById("info4-lon").value
       mapLat = document.getElementById("info4-lat").value
+
+      $("#sel_lat").val(mapLat);
+      $("#sel_lon").val(mapLong);
+
       map.zoom = 15;
       map.panTo({ lat: parseFloat(mapLat), lng: parseFloat(mapLong)}) 
     }, 1000);  
@@ -99,6 +118,10 @@ $(document).ready(function () {
     setTimeout(()=>{
       mapLong = document.getElementById("info5-lon").value
       mapLat = document.getElementById("info5-lat").value
+
+      $("#sel_lat").val(mapLat);
+      $("#sel_lon").val(mapLong);
+
       map.zoom = 15;
       map.panTo({ lat: parseFloat(mapLat), lng: parseFloat(mapLong)}) 
     }, 1000);  
@@ -109,6 +132,7 @@ $(document).ready(function () {
       map.zoom = 15;
       map.panTo({ lat: parseFloat(userLat), lng: parseFloat(userLong)}) 
   });
+
 
    initParkingInfoPanel();
 })
