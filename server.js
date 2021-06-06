@@ -5,7 +5,7 @@ const ejs = require('ejs');
 const passport = require('passport');
 const mongoose = require('mongoose');
 const session = require('express-session');
-const {ensureAuthenticated, forwardAuthenticated} = require('./ensureAuth');
+//const {ensureAuthenticated, forwardAuthenticated} = require('./ensureAuth');
 
 //require('../spsf_service/config/googleauth');
 
@@ -47,8 +47,13 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+function isLoggedIn(req, res, next) {
+   //req.isAuthenticated() ? next() : res.redirect('/login'); 
+    req.user ? next() : res.redirect('/login');
+}
+
 //spsf index page to sign in (landing or the signin page)
-app.get('/', (request,response) => {
+app.get('/', isLoggedIn, (request,response) => {
     if(loggedIn){
         response.render('displayDashboard', {title: 'SPSF - Dashboard',username:loggedUsername,loggedIn:loggedIn, signIn:false});
 
@@ -136,7 +141,6 @@ app.post('/displaySendPassword',function(request,response){
 
 // user sign off from the system
 app.get('/logout',function(request,response){
-    //response.redirect('/');
     loggedIn=response.loggedIn;
     loggedUsername = '';
     response.render('index', {title: 'SPSF - Home', username:'',password:'',message:'',loggedIn:loggedIn, signIn:false});
@@ -164,7 +168,7 @@ app.post('/changepassword', function(req, res){
 })
 
 //process user dashboard funtionality and route the user to the dessired page
-app.post('/displayDashboard',function(request,response){
+app.post('/displayDashboard', function(request,response){
     if(loggedIn){
         if(request.body.FindParking==='find'){
             response.render('displayParkingMap', {title: 'SPSF - Parking Availability', username:loggedUsername,loggedIn:loggedIn, signIn:false});
@@ -217,15 +221,26 @@ app.get('/getAllAvailableParkingData', function (request,response){
     })          
 })
 
-app.get('/google', passport.authenticate('google', { scope: ['profile'] }));
+app.get('/google', 
+    passport.authenticate('google', { scope: ['email', 'profile'] }));
 
-app.get('/google/callback', function(request, response) {
-    try {
-        response.render('displayDashboard', {title: 'SPSF - Dashboard',username:loggedUsername,loggedIn:loggedIn, signIn:false});
-    } catch (error) {
-        response.render('index', {title: 'SPSF - Home', username:loggedUsername,password:'',message:'',loggedIn:loggedIn, signIn:false}); 
-    }   
+app.get('/google/callback', 
+    passport.authenticate('google',{
+        successRedirect: '/success',
+        failureRedirect: '/failure'
+}));
+
+
+app.get('/failure', (req, res) => {
+    loggedIn=false;
+    res.render('index', {title: 'SPSF - Home', username:loggedUsername,password:'',message:'',loggedIn:loggedIn, signIn:true});
 });
+
+app.get('/success', (req, res) => {
+    loggedIn=true;
+    loggedUsername = req.body.Username;
+    res.render('displayDashboard', {title: 'SPSF - Dashboard',username:loggedUsername,loggedIn:loggedIn, signIn:false});
+})
 
 app.listen(port);
 console.log('Server listening on : '+port);
