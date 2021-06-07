@@ -5,9 +5,10 @@ const ejs = require('ejs');
 const passport = require('passport');
 const mongoose = require('mongoose');
 const session = require('express-session');
+const { request } = require('express');
 //const {ensureAuthenticated, forwardAuthenticated} = require('./ensureAuth');
 
-//require('../spsf_service/config/googleauth');
+//require('../spsf_service/config/auth');
 
 var port = process.env.PORT || 3000;   
 //var spsfServiceUrl = 'https://spsfservice.us-south.cf.appdomain.cloud';
@@ -23,16 +24,16 @@ var loggedIn=false;
 var loggedUsername ='';
 
 //passport google 
-require('./googleauth');
+require('./config/googleauth');
 
-// try {
-//     // Connect to the MongoDB cluster
-//     mongoose.connect(
-//     uri,{ useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true},
-//         () => console.log(" Mongoose is connected...")
-//     ); } catch (e) {
-//     console.log("could not connect...");
-//   }
+try {
+    // Connect to the MongoDB cluster
+    mongoose.connect(
+    uri,{ useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true},
+        () => console.log(" Mongoose is connected...")
+    ); } catch (e) {
+    console.log("could not connect...");
+  }
 
 
 //express session
@@ -82,6 +83,7 @@ app.post('/', function(request,response){
         }              
     });
 })
+
 
 // get registration form when user try to register
 app.get('/displayRegister', function(request,response){
@@ -139,30 +141,23 @@ app.post('/displaySendPassword',function(request,response){
     });
 })
 
-// user sign off from the system
-app.get('/logout',function(request,response){
-    loggedIn=response.loggedIn;
-    loggedUsername = '';
-    response.render('index', {title: 'SPSF - Home', username:'',password:'',message:'',loggedIn:loggedIn, signIn:false});
-    console.log('signed off!');
-});
-
 app.get('/login',function(request,response){
     response.render('index', {title: 'SPSF - Home', username:'',password:'',message:'',loggedIn:loggedIn, signIn:false});
     console.log('Auth failed!');
 });
 
-app.post('/changepassword', function(req, res){
-    reqObject = spsfServiceUrl+"/changepassword?oldpassword"+request.body.OldPassword+"&newpassword"+request.body.NewPassword+"&confirmpassword"+request.body.ConfirmPassword;
+app.post('/changepassword', function(request, response){
+    reqObject = spsfServiceUrl+"/changepassword?currentemail="+request.body.CurrentEmail+"&oldpassword="+request.body.OldPassword+"&newpassword="+request.body.NewPassword+"&confirmpassword="+request.body.ConfirmPassword;
     req(reqObject,(err,result,body)=> {
         if(err){
             return console.log(err);
         }
         if(JSON.parse(result.body).changed ==='true'){
-            response.render('index', {title: 'SPSF - Home', username:loggedUsername,password:'',message:'',loggedIn:loggedIn, signIn:false});
+            response.render('index', {title: 'SPSF - Home', username:'',password:'',message:'',loggedIn:false, signIn:false});
         }else{
             let message= JSON.parse(result.body).message;
-            response.render('displayChangePassword', {title: 'SPSF - Change Password', username:loggedUsername,oldpassword:'',newpassword:'',confirmpassword:'',message:message,loggedIn:loggedIn, signIn:false});
+            response.render('displayChangePassword', {title: 'SPSF - Change Password', username:loggedUsername,currentemail:'',oldpassword:'',newpassword:'',confirmpassword:'',message:message,loggedIn:loggedIn, signIn:false});
+            console.log('failed');
         }              
     }); 
 })
@@ -175,7 +170,7 @@ app.post('/displayDashboard', function(request,response){
         }else if (request.body.FuturePrediction==='prediction'){
             response.render('displayFuturePrediction', {title: 'SPSF - Future Parking Availability', username:loggedUsername,loggedIn:loggedIn, signIn:false});
         }else if(request.body.ChangePassword==='change'){
-            response.render('displayChangePassword', {title: 'SPSF - Change Password', username:loggedUsername,oldpassword:'',newpassword:'',confirmpassword:'',message:'',loggedIn:loggedIn, signIn:false});
+            response.render('displayChangePassword', {title: 'SPSF - Change Password', username:loggedUsername,currentemail:'',oldpassword:'',newpassword:'',confirmpassword:'',message:'',loggedIn:loggedIn, signIn:false});
         }else if(request.body.ParkingHistory==='history'){
             response.render('displayParkingHistory', {title: 'SPSF - Parking History', username:loggedUsername,loggedIn:loggedIn, signIn:false});
         }       
@@ -238,9 +233,30 @@ app.get('/failure', (req, res) => {
 
 app.get('/success', (req, res) => {
     loggedIn=true;
-    loggedUsername = req.body.Username;
+    loggedUsername = req.user.displayName;
     res.render('displayDashboard', {title: 'SPSF - Dashboard',username:loggedUsername,loggedIn:loggedIn, signIn:false});
 })
+
+// app.get('/logged', (req, res) => {
+//     loggedIn=false;
+//     res.render('index', {title: 'SPSF - Home', username:loggedUsername,password:'',message:'',loggedIn:loggedIn, signIn:true});
+// });
+
+// app.get('/rejected', (req, res) => {
+//     loggedIn=true;
+//     loggedUsername = req.user.displayName;
+//     res.render('displayDashboard', {title: 'SPSF - Dashboard',username:loggedUsername,loggedIn:loggedIn, signIn:false});
+// })
+
+// user sign off from the system
+app.get('/logout',function(request,response){
+    request.logout();
+    request.session.destroy();
+    loggedIn=response.loggedIn;
+    loggedUsername = '';
+    response.render('index', {title: 'SPSF - Home', username:'',password:'',message:'',loggedIn:loggedIn, signIn:false});
+    console.log('signed off!');
+});
 
 app.listen(port);
 console.log('Server listening on : '+port);
