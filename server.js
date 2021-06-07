@@ -9,8 +9,8 @@ const req = require('request');
 const ejs = require('ejs');
 
 var port = process.env.PORT || 3000;   
-var spsfServiceUrl = 'https://spsfservice.us-south.cf.appdomain.cloud';
-//var spsfServiceUrl = 'http://localhost:8080';
+//var spsfServiceUrl = 'https://spsfservice.us-south.cf.appdomain.cloud';
+var spsfServiceUrl = 'http://localhost:8080';
 
 app.use(express.static(__dirname +'/public'));
 //use express boady parser to get view data
