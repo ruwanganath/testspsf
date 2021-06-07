@@ -13,7 +13,7 @@ var bstptid = '';
 			var s = i(5 * e);
 			return '<li class="cell-2 js-minute-cell" data-val="' + s + '">' + s + "</li>"
 		}).join(""),
-		l = t('<div class="timepicker">\t\t<div v-show class="title">Hrs&nbsp&nbsp&nbsp&nbsp&nbsp Mins</div>\t\t\t<div class="chose-all">\t\t\t\t<div class="handle">\t\t\t\t\t<div class="cell-4"><a class="icon-up js-plus-houer"></a></div>\t\t\t\t\t<div class="cell-2"></div>\t\t\t\t\t<div class="cell-4"><a class="icon-up js-plus-minute"></a></div>\t\t\t\t</div>\t\t\t\t<div class="text">\t\t\t\t\t<div class="cell-4"><a class="js-hour-show" title=""></a></div>\t\t\t\t\t<div class="cell-2">:</div>\t\t\t\t\t<div class="cell-4"><a class="js-minute-show" title="Select Time"></a></div>\t\t\t\t</div>\t\t\t\t<div class="handle">\t\t\t\t\t<div class="cell-4"><a class="icon-down js-minus-houer"></a></div>\t\t\t\t\t<div class="cell-2"></div>\t\t\t\t\t<div class="cell-4"><a class="icon-down js-minus-minute"></a></div>\t\t\t\t</div>\t\t\t</div>\t\t\t<div class="chose-hour">\t\t\t\t<ul class="handle">' + o + '</ul>\t\t\t</div>\t\t\t<div class="chose-minute">\t\t\t\t<ul class="handle">' + c + "</ul>\t\t\t</div>\t\t</div>\t</div>");
+		l = t('<div class="timepicker">\t\t<div v-show class="title">Hrs&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Mins</div>\t\t\t<div class="chose-all">\t\t\t\t<div class="handle">\t\t\t\t\t<div class="cell-4"><a class="icon-up js-plus-houer"></a></div>\t\t\t\t\t<div class="cell-2"></div>\t\t\t\t\t<div class="cell-4"><a class="icon-up js-plus-minute"></a></div>\t\t\t\t</div>\t\t\t\t<div class="text">\t\t\t\t\t<div class="cell-4"><a class="js-hour-show" title=""></a></div>\t\t\t\t\t<div class="cell-2">:</div>\t\t\t\t\t<div class="cell-4"><a class="js-minute-show" title="Select Time"></a></div>\t\t\t\t</div>\t\t\t\t<div class="handle">\t\t\t\t\t<div class="cell-4"><a class="icon-down js-minus-houer"></a></div>\t\t\t\t\t<div class="cell-2"></div>\t\t\t\t\t<div class="cell-4"><a class="icon-down js-minus-minute"></a></div>\t\t\t\t</div>\t\t\t</div>\t\t\t<div class="chose-hour">\t\t\t\t<ul class="handle">' + o + '</ul>\t\t\t</div>\t\t\t<div class="chose-minute">\t\t\t\t<ul class="handle">' + c + "</ul>\t\t\t</div>\t\t</div>\t</div>");
 	return l.find("a").attr("href", "javascript:void(0);"), s.content = l, s.title = l.find(".title"), s.choseAll = l.find(".chose-all"), s.choseMinute = l.find(".chose-minute"), s.choseHour = l.find(".chose-hour"), s.hourShow = l.find(".js-hour-show"), s.minuteShow = l.find(".js-minute-show"), s.update = function () {
 		return bstptid.val(i(this.hour) + " Hrs : " + i(this.minute)+ " Mins"), this.minuteShow.text(i(this.minute)), this.hourShow.text(i(this.hour)), this.inputTarget.$timepickerUpdate(), this
 	}, s.bindEvent = function () {
@@ -42,8 +42,8 @@ var bstptid = '';
 		if (this[0].nodeName && "INPUT" === this[0].nodeName) return this.$timepickerUpdate = n, this.off("click").on("click", function (i) {
 			var n = this.value;
 			bstptid = $(this);
-            n="0", s="0", o="0"
-			//e.test(n) ? (n = n.split(":"), s = +n[0], o = +n[1]) : (n = new Date, s = n.getHours(), o = n.getMinutes());
+            //n="0", s="0", o="0"
+			e.test(n) ? (n = n.split(":"), s = +n[0], o = +n[1]) : (n = new Date, s = n.getHours(), o = n.getMinutes());
 			if ($(this).closest('table').length > 0) {
 				var pos = $(this).offset();
 				var h = pos.left + "px", a = pos.top + this.offsetHeight + "px";

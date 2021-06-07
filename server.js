@@ -176,7 +176,7 @@ app.post('/parkingMapRoutesMidPanel',function(request,response){
 
     if(loggedIn){
         if (request.body.Navigate==='navigate'){
-                response.render('displayNavigation', {title: 'SPSF - Display Navigation', username:loggedUsername,loggedIn:loggedIn, timer:'', signIn:false, navArray:request.body.NavArray, navArrayIndex: request.body.NavArrayIndex});
+                response.render('displayNavigation', {title: 'SPSF - Display Navigation', username:loggedUsername,loggedIn:loggedIn, timer:'', mobileno:'', signIn:false, navArray:request.body.NavArray, navArrayIndex: request.body.NavArrayIndex});
             }       
     }else{
         response.render('index', {title: 'SPSF - Home', username:loggedUsername,password:'',message:'',loggedIn:loggedIn, signIn:false});
@@ -221,6 +221,17 @@ app.post('/Login', function(request,response){
         response.render('displayDashboard', {title: 'SPSF - Dashboard',username:loggedUsername,loggedIn:loggedIn, signIn:false});
     }
 });
+
+app.post('/notify',function(request,response){
+
+    if(loggedIn){
+        if (request.body.Notify==='notify'){
+            response.render('displayDashboard', {title: 'SPSF - Dashboard',username:loggedUsername,loggedIn:loggedIn, signIn:false});
+        }else{
+            response.render('index', {title: 'SPSF - Home', username:loggedUsername,password:'',message:'',loggedIn:loggedIn, signIn:false});
+        }  
+    }
+})
 
 
 http.listen(port,()=>{

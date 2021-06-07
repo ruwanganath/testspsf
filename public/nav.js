@@ -130,4 +130,6 @@ function attachInstructionText(stepDisplay, marker, text, map) {
     stepDisplay.setContent(text);
     stepDisplay.open(map, marker);
   });
+
+
 }
