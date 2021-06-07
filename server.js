@@ -154,7 +154,11 @@ app.post('/changepassword', function(request, response){
         }
         if(JSON.parse(result.body).changed ==='true'){
             response.render('index', {title: 'SPSF - Home', username:'',password:'',message:'',loggedIn:false, signIn:false});
-        }else{
+        }
+        // if(JSON.parse(result.body).mismatch ==='true'){
+        //     response.send("alert('incorrect password or email, try again)");
+        // }
+        else{
             let message= JSON.parse(result.body).message;
             response.render('displayChangePassword', {title: 'SPSF - Change Password', username:loggedUsername,currentemail:'',oldpassword:'',newpassword:'',confirmpassword:'',message:message,loggedIn:loggedIn, signIn:false});
             console.log('failed');
