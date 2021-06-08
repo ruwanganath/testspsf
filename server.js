@@ -7,19 +7,20 @@ let io = require('socket.io')(http);
 
 const req = require('request');
 const ejs = require('ejs');
-
-var port = process.env.PORT || 3000;   
-//var spsfServiceUrl = 'https://spsfservice.us-south.cf.appdomain.cloud';
-var spsfServiceUrl = 'http://localhost:8080';
+const Swal = require('sweetalert2')
 
 app.use(express.static(__dirname +'/public'));
 //use express boady parser to get view data
 app.use(express.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
+require('dotenv').config({path: __dirname + '/.env'})
+
+var port = process.env.PORT || 3000;   
+//var spsfServiceUrl = 'https://spsfservice.us-south.cf.appdomain.cloud';
+var spsfServiceUrl = 'http://localhost:8080';
 
 var loggedIn=false;
 var loggedUsername ='';
-
 
 //establish the socket connection
 io.on('connection', (socket) => {
@@ -139,8 +140,6 @@ app.post('/displayDashboard',function(request,response){
     if(loggedIn){
         if(request.body.FindParking==='find'){
             response.render('displayParkingMap', {title: 'SPSF - Parking Availability', username:loggedUsername,loggedIn:loggedIn, signIn:false});
-        }else if (request.body.FuturePrediction==='prediction'){
-            response.render('displayFuturePrediction', {title: 'SPSF - Future Parking Availability', username:loggedUsername,loggedIn:loggedIn, signIn:false});
         }else if(request.body.ChangePassword==='change'){
             response.render('displayChangePassword', {title: 'SPSF - Change Password', username:loggedUsername,oldpassword:'',newpassword:'',confirmpassword:'',message:'',loggedIn:loggedIn, signIn:false});
         }else if(request.body.ParkingHistory==='history'){
@@ -206,9 +205,8 @@ app.get('/displayParkingHistory',function(request,response){
             {
                 return console.log(err);
             }
-            response.render('displayParkingHistory',{title:"SPSF - Parking History",username:loggedUsername,password:'',message:'',historydata:result.body,loggedIn:loggedIn,signIn:false});
-        })
         
+        })
     }
     else
     {
@@ -226,12 +224,17 @@ app.post('/notify',function(request,response){
 
     if(loggedIn){
         if (request.body.Notify==='notify'){
-            response.render('displayDashboard', {title: 'SPSF - Dashboard',username:loggedUsername,loggedIn:loggedIn, signIn:false});
-        }else{
-            response.render('index', {title: 'SPSF - Home', username:loggedUsername,password:'',message:'',loggedIn:loggedIn, signIn:false});
-        }  
+            reqObject = spsfServiceUrl+"/notify?mobile="+request.body.Mobile+"&time="+request.body.Time;
+            req(reqObject,(err,result,body)=> {
+                if(err){
+                    return console.log(err);
+                }  
+               response.render('displayDashboard', {title: 'SPSF - Dashboard',username:loggedUsername,loggedIn:loggedIn, signIn:false});                                                
+            })
+        } 
     }
 })
+
 
 
 http.listen(port,()=>{

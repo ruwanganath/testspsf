@@ -20,13 +20,14 @@
                 <div class="navinfo">                    
                     <div class="input-field col s12">
                         <input id="mobile" type="tel" class="form-control" maxlength="10" name="Mobile" required placeholder="Mobile No:(04XXXXXXXX)" 
-                        oninvalid="this.setCustomValidity('Please use 04XXXXXXXX format')" oninput="this.setCustomValidity('')"pattern="^04[0-9]{8}$" value=<%= mobileno %>>
+                        oninvalid="this.setCustomValidity('Please use 04XXXXXXXX format')" oninput="this.setCustomValidity('')" pattern="^04[0-9]{8}$" value=<%= mobileno %>>
                     </div>  
                     <div class="input-field col s12">
-                        <input id="time" type="text" class="form-control bs-timepicker" name="Time" required placeholder="Enter Time" value=<%= timer %>>
+                        <input id="time" type="text" class="form-control bs-timepicker" name="Time" required placeholder="Enter Time" pattern="^((?!(0:00)|(00:00)$)0?[0-2][0-9]:[0-5][0-9])$" 
+                        onclick="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Time has to be atleast one minute')"  value=<%= timer %>>
                     </div>  
                 </div>
-                <button id="btn-notify" class="waves-effect waves-light btn center" name="Notify" value="notify" type="submit">Notify Me</button>
+                <button id="btn-notify" class="waves-effect waves-light btn center"  name="Notify" value="notify" type="submit">Notify Me</button>
             </form>
         </div>         
       
