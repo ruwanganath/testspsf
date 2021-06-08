@@ -16,8 +16,8 @@ const session = require('express-session');
 //require('../spsf_service/config/auth');
 
 var port = process.env.PORT || 3000;   
-//var spsfServiceUrl = 'https://spsfservice.us-south.cf.appdomain.cloud';
-var spsfServiceUrl = 'http://localhost:8080';
+var spsfServiceUrl = 'https://spsfservice.us-south.cf.appdomain.cloud';
+//var spsfServiceUrl = 'http://localhost:8080';
 const uri = "mongodb+srv://sit780:sit780@vaccinetracker.4wro0.mongodb.net/account?retryWrites=true&w=majority";
 
 app.use(express.static(__dirname +'/public'));
