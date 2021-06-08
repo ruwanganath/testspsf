@@ -27,9 +27,10 @@
 
   <script src="nav.js"></script>
   <script type="text/javascript">
-    setTimeout(function(){
+    setInterval(function(){
+      initMap();
       navigate_to_location(select_lat,select_lon);
-    },2000);  
+    },120000);  
   
   </script>
 </body>
