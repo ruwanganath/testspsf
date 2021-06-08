@@ -4,6 +4,8 @@ let mapLat = -37.840935;
 let userLat = -37.840935;
 let userLong = 144.946457;
 let mapZoom=12;
+let directionsDisplay;
+let directionsService;
 
 $(document).ready(function () {
 
@@ -18,55 +20,123 @@ $(document).ready(function () {
     alert('Geo location is not supported');
   }
 
+  //navigate_to_location(select_lat,select_lon);
   $('.bs-timepicker').timepicker();
+
+});
+  
  
-})
 
 function initMap() {
   const markerArray = [];
   // Instantiate a directions service.
-  const directionsService = new google.maps.DirectionsService();
+  //const directionsService = new google.maps.DirectionsService();
   // Create a map and center it on Manhattan.
-  const map = new google.maps.Map(document.getElementById("map"), {
+
+  if (navigator.geolocation)
+  {
+    navigator.geolocation.getCurrentPosition(function(position){
+      userLat = position.coords.latitude;
+      userLong = position.coords.longitude;
+    });
+    
+  }else{
+    alert('Geo location is not supported');
+  }
+
+
+  directionsService = new google.maps.DirectionsService();
+  directionsDisplay=new google.maps.DirectionsRenderer();
+
+  map = new google.maps.Map(document.getElementById("map"), {
     zoom: parseFloat(mapZoom),
-    center: { lat: parseFloat(mapLat), lng: parseFloat(mapLong) },
+    center: { lat: parseFloat(userLat), lng: parseFloat(userLong) },
     streetViewControl:false,
   });
 
-  var myLatLng = new google.maps.LatLng(-37.840935, 144.946457);
+  
+
+
+  var myLatLng = new google.maps.LatLng(parseFloat(userLat), parseFloat(userLong));
   new google.maps.Marker({
     position: myLatLng,
     icon:"/images/yous.png",
     map,
     title: '',            
   });
+
+  
+
+
+  //navigate_to_location(select_lat,select_lon);
   // Create a renderer for directions and bind it to the map.
-  const directionsRenderer = new google.maps.DirectionsRenderer({ map: map });
-  // Instantiate an info window to hold step text.
-  const stepDisplay = new google.maps.InfoWindow();
-  // Display the route between the initial start and end selections.
-  calculateAndDisplayRoute(
-    directionsRenderer,
-    directionsService,
-    markerArray,
-    stepDisplay,
-    map
-  );
+  // const directionsRenderer = new google.maps.DirectionsRenderer({ map: map });
+  // // Instantiate an info window to hold step text.
+  // const stepDisplay = new google.maps.InfoWindow();
+  // // Display the route between the initial start and end selections.
+  // calculateAndDisplayRoute(
+  //   directionsRenderer,
+  //   directionsService,
+  //   markerArray,
+  //   stepDisplay,
+  //   map
+  // );
 
-  // Listen to change events from the start and end lists.
-  const onChangeHandler = function () {
-    calculateAndDisplayRoute(
-      directionsRenderer,
-      directionsService,
-      markerArray,
-      stepDisplay,
-      map
-    );
+  // // Listen to change events from the start and end lists.
+  // const onChangeHandler = function () {
+  //   calculateAndDisplayRoute(
+  //     directionsRenderer,
+  //     directionsService,
+  //     markerArray,
+  //     stepDisplay,
+  //     map
+  //   );
+  // };
+
+
+  // document.getElementById("start").addEventListener("change", onChangeHandler);
+  // document.getElementById("end").addEventListener("change", onChangeHandler);
+}
+
+$(window).on('load',function()
+{
+  navigate_to_location(select_lat,select_lon);
+});
+
+function navigate_to_location(sel_lat,sel_long)
+{
+
+
+  console.log(userLat);
+  console.log(userLong);
+
+  var start=new google.maps.LatLng(parseFloat(userLat),parseFloat(userLong));
+
+  var end = new google.maps.LatLng(parseFloat(sel_lat),parseFloat(sel_long));
+
+  var bounds=new google.maps.LatLngBounds();
+  bounds.extend(start);
+  bounds.extend(end);
+  map.fitBounds(bounds);
+
+  var request={
+    origin: start,
+    destination: end,
+    travelMode: google.maps.TravelMode.DRIVING
   };
+  directionsService.route(request,function(response,status){
+    if(status==google.maps.DirectionsStatus.OK)
+    {
+      directionsDisplay.setDirections(response);
+      directionsDisplay.setMap(map);
+    }
+    else
+    {
+      console.log("Direction request failed:"+status);
+    }
 
+  });
 
-  document.getElementById("start").addEventListener("change", onChangeHandler);
-  document.getElementById("end").addEventListener("change", onChangeHandler);
 }
 
 function calculateAndDisplayRoute(
