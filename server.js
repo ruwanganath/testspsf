@@ -7,7 +7,6 @@ let io = require('socket.io')(http);
 
 const req = require('request');
 const ejs = require('ejs');
-const Swal = require('sweetalert2')
 const passport = require('passport');
 const mongoose = require('mongoose');
 const session = require('express-session');
