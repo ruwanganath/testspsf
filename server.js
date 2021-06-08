@@ -16,8 +16,8 @@ const session = require('express-session');
 //require('../spsf_service/config/auth');
 
 var port = process.env.PORT || 3000;   
-var spsfServiceUrl = 'https://spsfservice.us-south.cf.appdomain.cloud';
-//var spsfServiceUrl = 'http://localhost:8080';
+//var spsfServiceUrl = 'https://spsfservice.us-south.cf.appdomain.cloud';
+var spsfServiceUrl = 'http://localhost:8080';
 const uri = "mongodb+srv://sit780:sit780@vaccinetracker.4wro0.mongodb.net/account?retryWrites=true&w=majority";
 
 app.use(express.static(__dirname +'/public'));
@@ -233,7 +233,7 @@ app.post('/parkingMapRoutesMidPanel',function(request,response){
 
     if(loggedIn){
         if (request.body.Navigate==='navigate'){
-                response.render('displayNavigation', {title: 'SPSF - Display Navigation', username:loggedUsername,loggedIn:loggedIn, timer:'', signIn:false, navArray:request.body.NavArray, navArrayIndex: request.body.NavArrayIndex});
+                response.render('displayNavigation', {title: 'SPSF - Display Navigation', username:loggedUsername,loggedIn:loggedIn, timer:'', signIn:false, mobileno:'', navArray:request.body.NavArray, navArrayIndex: request.body.NavArrayIndex,slat:request.body.sel_lat,slon:request.body.sel_lon});
             }       
     }else{
         response.render('index', {title: 'SPSF - Home', username:loggedUsername,password:'',message:'',loggedIn:loggedIn, signIn:false});

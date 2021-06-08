@@ -133,11 +133,8 @@ $(document).ready(function () {
       map.zoom = 15;
       map.panTo({ lat: parseFloat(userLat), lng: parseFloat(userLong)}) 
   });
-<<<<<<< HEAD
 
 
-=======
->>>>>>> c5b31070e15d8d1af76b7dbd476a18ea17d56b82
    initParkingInfoPanel();
 })
 
