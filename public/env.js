@@ -449,4 +449,5 @@ let descTwo;
     document.getElementById("navarray").value = JSON.stringify(array[4]);
     document.getElementById("navarrayindexselected").value = listNo;
   });
+
 }

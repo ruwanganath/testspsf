@@ -223,7 +223,7 @@ header .header-btn{
 }
 
 .navigation input{
-	height:29px;
+	height:25px;
 }
 .signin button , .dash button, .register button, .sendpassword button, .changepassword button{
 	width: 228px;
