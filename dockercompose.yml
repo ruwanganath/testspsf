@@ -1,0 +1,31 @@
+steps:
+    checkoutApp1:
+      title: 'Clone first rep (service)'
+      type: git-clone
+      repo: kostis-codefresh/example_nodejs_postgres
+      revision: experiment1
+      git: github
+      stage: 'clone phase'
+    checkoutApp2:
+      title: 'Cloning second repository...'
+      type: git-clone
+      repo: kostis-codefresh/trivial-go-web
+      revision: master
+      git: github
+      stage: 'clone phase'
+    myFirstDockerImage:
+      title: 'Building Microservice A'
+      type: build
+      dockerfile: Dockerfile
+      image_name: my-nodejs-image
+      tag: from-develop-branch
+      working_directory: './example_nodejs_postgres'
+      stage: 'build phase'   
+    mySecondDockerImage:
+      title: 'Building Microservice B'
+      type: build
+      dockerfile: Dockerfile
+      working_directory: './trivial-go-web'
+      image_name: my-app-image
+      tag: from-master-branch
+      stage: 'build phase'

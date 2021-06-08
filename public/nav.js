@@ -21,8 +21,11 @@ $(document).ready(function () {
   }
 
   //navigate_to_location(select_lat,select_lon);
+  $('.bs-timepicker').timepicker();
 
 });
+  
+ 
 
 function initMap() {
   const markerArray = [];

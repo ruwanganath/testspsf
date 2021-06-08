@@ -4,6 +4,7 @@ let mapLat = -37.840935;
 let userLat = -37.840935;
 let userLong = 144.946457;
 let mapZoom=12;
+let socket = io();
 let calculateDistanceFunctionUrl='https://us-south.functions.appdomain.cloud/api/v1/web/ruwanganath%40hotmail.com_dev/default/getDistanceToParkingSpot'
 
 $(document).ready(function () {
@@ -132,76 +133,65 @@ $(document).ready(function () {
       map.zoom = 15;
       map.panTo({ lat: parseFloat(userLat), lng: parseFloat(userLong)}) 
   });
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> c5b31070e15d8d1af76b7dbd476a18ea17d56b82
    initParkingInfoPanel();
 })
 
 initMap = function () {
-    map = new google.maps.Map(document.getElementById("map"), {
-      center: { lat: parseFloat(mapLat), lng: parseFloat(mapLong) },
-      zoom: parseFloat(mapZoom),
-      streetViewControl:false,
-      mapTypeControl: false,
-      styles:[
-        {
-          featureType: "poi.business",
-          stylers: [{ visibility: "off" }],
-        },
-        {
-          featureType: "transit",
-          elementType: "labels.icon",
-          stylers: [{ visibility: "off" }],
-        },
-      ],
-    });
+
+  //update user loaction
+  getUserCurrentLocation()
+
+  map = new google.maps.Map(document.getElementById("map"), {
+    center: { lat: parseFloat(mapLat), lng: parseFloat(mapLong) },
+    zoom: parseFloat(mapZoom),
+    streetViewControl:false,
+    mapTypeControl: false,
+    styles:[
+      {
+        featureType: "poi.business",
+        stylers: [{ visibility: "off" }],
+      },
+      {
+        featureType: "transit",
+        elementType: "labels.icon",
+        stylers: [{ visibility: "off" }],
+      },
+    ],
+  });
     
-
-  let socket = io();
-
-    //listening to update map with available parking data using sockets    
-    socket.on('initiate_map',  (data) => {
-      console.log(data)
-      getUserCurrentLocation(userLat,userLong)
-      //updating available parking data
-       getUpdatedAvailableParkingData(userLat,userLong)
-    })
-
-    //listening to update map with available parking data using sockets    
-    socket.on('update_map',  (data) => {
-      console.log(data)
-      getUserCurrentLocation(userLat,userLong)
-      //updating available parking data
-       getUpdatedAvailableParkingData(userLat,userLong)
-    })
+     //updating available parking data      
+    getUpdatedAvailableParkingData()
  }
+
+ //listening to update map with available parking data using sockets    
+ socket.on('update_map',  (data) => {
+  console.log(data)
+  initMap();
+})
 
 
 //seting up user current location on the map function
- getUserCurrentLocation = function (userLat,userLong){
+getUserCurrentLocation = function (){
 
-    if (navigator.geolocation)
-    {
-      navigator.geolocation.getCurrentPosition(function(position){
-        userLat = position.coords.latitude;
-        userLong = position.coords.longitude;
-      });
-      
-    }else{
-      alert('Geo location is not supported');
-    }
-    //setting up user marker
-    let userLatLng = { lat: parseFloat(userLat), lng: parseFloat(userLong)};
-    new google.maps.Marker({
-      position: userLatLng,
-      icon: "/images/yous.png",
-      map,
-      title: 'Your Current Location',            
+  if (navigator.geolocation)
+  {
+    navigator.geolocation.getCurrentPosition(function (position) {
+      userLat = position.coords.latitude;
+      userLong = position.coords.longitude;
     });
- }
+    
+  }else{
+    alert('Geo location is not supported');
+  }
+}
 
 //setting up available parking spot markers on the map function
-getUpdatedAvailableParkingData = function(userLat,userLong){
+getUpdatedAvailableParkingData = function(){
  
   $.ajax({
     url: '/getAllAvailableParkingData',
@@ -212,7 +202,17 @@ getUpdatedAvailableParkingData = function(userLat,userLong){
       jsonData = JSON.parse(data);
       var keys = Object.keys(jsonData);
 
-      keys.forEach(function(key){
+      //setting up user marker
+      let userLatLng = { lat: parseFloat(userLat), lng: parseFloat(userLong)};
+      new google.maps.Marker({
+        position: userLatLng,
+        icon: "/images/yous.png",
+        map,
+        title: 'Your Current Location',            
+      });
+    
+      keys.forEach(function(key,index){
+        
           let myLatLng = { lat: parseFloat(jsonData[key].lat), lng: parseFloat(jsonData[key].lon)};
           let custIcon='';
           if(jsonData[key].type ==='on'){
@@ -222,29 +222,14 @@ getUpdatedAvailableParkingData = function(userLat,userLong){
           }else{
             custIcon = "/images/opts.png";
           }
-            
-          new google.maps.Marker({
-            position: myLatLng,
-            icon: custIcon,
-            map,
-            title: 'Bay/Base Property - '+jsonData[key].bay+' - '+jsonData[key].type+'-Street Parking',            
-          });        
-
-          /*
-          $.ajax({
-            url: calculateDistanceFunctionUrl+"?userLatitude="+userLat+"&userLongitude="+userLong+"&parkingLat="+parseFloat(jsonData[key].lat)+"&parkingLon="+parseFloat(jsonData[key].lon),
-            method: "GET",
-            success: function(data) {
-              data = JSON.stringify(data);
-              data = JSON.parse(data);            
-              let object = {distance: data.dist , type: jsonData[key].type, bay:jsonData[key].bay, rate:'4.00', lat:jsonData[key].lat, lon:jsonData[key].lon , desc1:jsonData[key].desc1, desc2:jsonData[key].desc2}
-              arrayNearestParking.push(object); 
-            }      
-          }).done(function(){
-              arrayNearestParking = sortJsonObjectArrayByKey(arrayNearestParking, 'distance');   
-              updateParkingList(arrayNearestParking);
-              updateParkingInfoPanel(arrayNearestParking);
-          })*/
+          if(index !==0){  
+            new google.maps.Marker({
+              position: myLatLng,
+              icon: custIcon,
+              map,
+              title: 'Bay/Base Property - '+jsonData[key].bay+' - '+jsonData[key].type+'-Street Parking',            
+            });        
+          }
       });
         arrayNearestParking = getNearestParkingSpots(parseFloat(userLat),parseFloat(userLong),data)
         updateParkingList(arrayNearestParking);
