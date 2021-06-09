@@ -136,14 +136,20 @@ function navigate_to_location(sel_lat,sel_long)
       //console.log(getRoutes);
       //console.log(routes.steps[i].instructions);
 
-    var navigateHTML="<table class='table table-striped'><tr><th>Your location</th></tr>";
+    var navigateHTML="<table class='table table-striped'><tr><th>Your Steps</th></tr>";
+      navigateHTML+="<tr>";
+      navigateHTML+="<td>"+'Distance '+getRoute.distance.text+' '+'Duration '+getRoute.duration.text+' ';
+      navigateHTML+="</td>";
+      navigateHTML+="</tr>"; 
 
     for(var i=0; i < getRoute.steps.length; i++){
       console.log(getRoute.steps[i].instructions+ ' -> ' +getRoute.steps[i].distance.value);
       navigateHTML+="<tr>";
-      navigateHTML+="<td>"+getRoute.steps[i].instructions+"</td>";
+      navigateHTML+="<td>"+getRoute.steps[i].instructions+' -> '+"</td>";
       navigateHTML+="</tr>";
     }
+
+    console.log(getRoute);
 
     getRoute.steps.instructions+="</table>"
     document.getElementById("navigate_data").innerHTML=navigateHTML;
