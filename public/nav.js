@@ -6,6 +6,7 @@ let userLong = 144.946457;
 let mapZoom=12;
 let directionsDisplay;
 let directionsService;
+var getRoute; 
 
 $(document).ready(function () {
 
@@ -110,6 +111,7 @@ function navigate_to_location(sel_lat,sel_long)
   console.log(userLat);
   console.log(userLong);
 
+
   var start=new google.maps.LatLng(parseFloat(userLat),parseFloat(userLong));
 
   var end = new google.maps.LatLng(parseFloat(sel_lat),parseFloat(sel_long));
@@ -123,12 +125,29 @@ function navigate_to_location(sel_lat,sel_long)
     origin: start,
     destination: end,
     travelMode: google.maps.TravelMode.DRIVING
-  };
+  }; 
+
   directionsService.route(request,function(response,status){
     if(status==google.maps.DirectionsStatus.OK)
     {
       directionsDisplay.setDirections(response);
       directionsDisplay.setMap(map);
+      getRoute = response.routes[0].legs[0];
+      //console.log(getRoutes);
+      //console.log(routes.steps[i].instructions);
+
+    var navigateHTML="<table class='table table-striped'><tr><th>Your location</th></tr>";
+
+    for(var i=0; i < getRoute.steps.length; i++){
+      console.log(getRoute.steps[i].instructions+ ' -> ' +getRoute.steps[i].distance.value);
+      navigateHTML+="<tr>";
+      navigateHTML+="<td>"+getRoute.steps[i].instructions+"</td>";
+      navigateHTML+="</tr>";
+    }
+
+    getRoute.steps.instructions+="</table>"
+    document.getElementById("navigate_data").innerHTML=navigateHTML;
+
     }
     else
     {
@@ -203,3 +222,4 @@ function attachInstructionText(stepDisplay, marker, text, map) {
 
 
 }
+

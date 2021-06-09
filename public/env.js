@@ -138,6 +138,7 @@ $(document).ready(function () {
    initParkingInfoPanel();
 })
 
+
 initMap = function () {
 
   //update user loaction
