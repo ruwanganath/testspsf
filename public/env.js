@@ -1,3 +1,4 @@
+//initialising global variables user and map default lat longs
 let map;
 let mapLong = 144.946457;
 let mapLat = -37.840935;
@@ -5,10 +6,13 @@ let userLat = -37.840935;
 let userLong = 144.946457;
 let mapZoom=12;
 let socket = io();
+
+//function as a service to calculate distance among given coordinates
 let calculateDistanceFunctionUrl='https://us-south.functions.appdomain.cloud/api/v1/web/ruwanganath%40hotmail.com_dev/default/getDistanceToParkingSpot'
 
 $(document).ready(function () {
   
+  //handling the drop down menu in the parking available map page to show available parking in the selected suburb
   $("#suburblist").change(function(){
  
     if(this.value==='non'){
@@ -67,6 +71,7 @@ $(document).ready(function () {
   $("#sel_lat").val(mapLat);
   $("#sel_lon").val(mapLong);
 
+  //get lat long values of the selected parking location
   $( "#btn-info1" ).click(function() {
     setTimeout(()=>{
       mapLong = document.getElementById("info1-lon").value
@@ -128,21 +133,23 @@ $(document).ready(function () {
     }, 1000);  
   });
 
+  //handling recenter feature of the parking map page
   $( "#btn-viewme" ).click(function() {
       getUserCurrentLocation();
       map.zoom = 15;
       map.panTo({ lat: parseFloat(userLat), lng: parseFloat(userLong)}) 
   });
 
-
+//initialising the parking info panel
    initParkingInfoPanel();
 })
 
 initMap = function () {
 
-  //update user loaction
+  //update user loaction to get current user location
   getUserCurrentLocation()
 
+  //initialising the google map
   map = new google.maps.Map(document.getElementById("map"), {
     center: { lat: parseFloat(mapLat), lng: parseFloat(mapLong) },
     zoom: parseFloat(mapZoom),
@@ -207,7 +214,7 @@ getUpdatedAvailableParkingData = function(){
         map,
         title: 'Your Current Location',            
       });
-    
+    //setting up available parking markers
       keys.forEach(function(key,index){
         
           let myLatLng = { lat: parseFloat(jsonData[key].lat), lng: parseFloat(jsonData[key].lon)};
@@ -228,8 +235,11 @@ getUpdatedAvailableParkingData = function(){
             });        
           }
       });
+        //getting the nearest parking data to an array
         arrayNearestParking = getNearestParkingSpots(parseFloat(userLat),parseFloat(userLong),data)
+        //update the parking list panel
         updateParkingList(arrayNearestParking);
+        //update the parking info panel
         updateParkingInfoPanel(arrayNearestParking);
     }
   });
@@ -292,6 +302,7 @@ convertJsonToArray = function (json){
   return arrayOutput;
 }
 
+//update the parking list
 updateParkingList = function (array){
   array.forEach((element, index) => { 
      if (index===0){
@@ -336,6 +347,7 @@ updateParkingList = function (array){
   })
 }
 
+//initialise the parking info panel in the parking map page
 initParkingInfoPanel = function(){
   $("#listno").text('-');
   $("#bay").text('Bay ID - -');
@@ -346,6 +358,7 @@ initParkingInfoPanel = function(){
   $("#desctwo").text('-');
 }
 
+//updating the parking info panel
 updateParkingInfoPanel = function (array){
 let listNo;
 let bay;

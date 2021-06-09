@@ -10,25 +10,22 @@ const ejs = require('ejs');
 const passport = require('passport');
 const mongoose = require('mongoose');
 const session = require('express-session');
+require('dotenv').config({path: __dirname + '/.env'})
 
 //const {ensureAuthenticated, forwardAuthenticated} = require('./ensureAuth');
 
 //require('../spsf_service/config/auth');
 
-var port = process.env.PORT || 3000;   
-//var spsfServiceUrl = 'https://spsfservice.us-south.cf.appdomain.cloud';
-var spsfServiceUrl = 'http://localhost:8080';
-const uri = "mongodb+srv://sit780:sit780@vaccinetracker.4wro0.mongodb.net/account?retryWrites=true&w=majority";
+var port = process.env.RUNNING_PORT || 3000;   
+
+var spsfServiceUrl = process.env.SERVICE_URL
+const uri = process.env.MONGOOSE
 
 app.use(express.static(__dirname +'/public'));
 //use express boady parser to get view data
 app.use(express.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
-require('dotenv').config({path: __dirname + '/.env'})
 
-var port = process.env.PORT || 3000;   
-//var spsfServiceUrl = 'https://spsfservice.us-south.cf.appdomain.cloud';
-var spsfServiceUrl = 'http://localhost:8080';
 
 var loggedIn=false;
 var loggedUsername ='';
@@ -170,11 +167,13 @@ app.post('/displaySendPassword',function(request,response){
     });
 })
 
+//get login page to sigin in to the app
 app.get('/login',function(request,response){
     response.render('index', {title: 'SPSF - Home', username:'',password:'',message:'',loggedIn:loggedIn, signIn:false});
     console.log('Auth failed!');
 });
 
+//get change password page to change user password
 app.post('/changepassword', function(request, response){
     reqObject = spsfServiceUrl+"/changepassword?currentemail="+request.body.CurrentEmail+"&oldpassword="+request.body.OldPassword+"&newpassword="+request.body.NewPassword+"&confirmpassword="+request.body.ConfirmPassword;
     req(reqObject,(err,result,body)=> {
@@ -194,6 +193,14 @@ app.post('/changepassword', function(request, response){
         }              
     }); 
 })
+
+//process user dashboard funtionality and route the user to the dessired page
+app.get('/displayDashboard', function(request,response){
+    if(loggedIn){
+        response.render('displayDashboard', {title: 'SPSF - Dashboard',username:loggedUsername,loggedIn:loggedIn, signIn:false});
+    }
+})
+
 
 //process user dashboard funtionality and route the user to the dessired page
 app.post('/displayDashboard', function(request,response){
@@ -280,6 +287,7 @@ app.post('/Login', function(request,response){
     }
 });
 
+//handling notification feature of the navigation page
 app.post('/notify',function(request,response){
 
     if(loggedIn){
