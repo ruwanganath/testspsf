@@ -124,7 +124,7 @@ $(window).on('load',function()
 {
   navigate_to_location(select_lat,select_lon);
 });
-
+//navigation
 function navigate_to_location(sel_lat,sel_long)
 {
   var start=new google.maps.LatLng(parseFloat(userLat),parseFloat(userLong));
@@ -147,13 +147,13 @@ function navigate_to_location(sel_lat,sel_long)
     {
       directionsDisplay.setDirections(response);
       directionsDisplay.setMap(map);
-      getRoute = response.routes[0].legs[0];
+      getRoute = response.routes[0].legs[0]; //get current route from response 
       //console.log(getRoutes);
       //console.log(routes.steps[i].instructions);
-      
-    var navigateHTML="<div id='history_info' style='width: 100%;height:100%;overflow-y:auto'><table class='table table-striped'><tr><th>Your Steps</th></tr>";
+//display step by step directions to user inside the map 
+    var navigateHTML="<table class='table table-striped'><tr><th>Your Steps</th></tr>";
       navigateHTML+="<tr>";
-      navigateHTML+="<td>"+'Distance '+getRoute.distance.text+' '+'Duration '+getRoute.duration.text+' ';
+      navigateHTML+="<td>"+'Distance '+getRoute.distance.text+' '+'Duration '+getRoute.duration.text+' '; //add distance and duration 
       navigateHTML+="</td>";
       navigateHTML+="</tr>"; 
 

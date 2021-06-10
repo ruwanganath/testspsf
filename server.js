@@ -6,7 +6,7 @@ let http = require('http').createServer(app);
 let io = require('socket.io')(http);
 
 const req = require('request');
-const ejs = require('ejs');
+const ejs = require('ejs'); //view 
 const passport = require('passport');
 const mongoose = require('mongoose');
 const session = require('express-session');
@@ -17,7 +17,6 @@ const { request } = require('http');
 //const {ensureAuthenticated, forwardAuthenticated} = require('./ensureAuth');
 
 //require('../spsf_service/config/auth');
-
 var port = process.env.PORT || 3000;   
 
 var spsfServiceUrl = process.env.SERVICE_URL
@@ -85,6 +84,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+//verifying user exist
 function isLoggedIn(req, res, next) {
    //req.isAuthenticated() ? next() : res.redirect('/login'); 
     req.user ? next() : res.redirect('/login');
@@ -152,19 +152,16 @@ app.post('/displayRegister',function(request,response){
 
 // get forget password page to recover password
 app.get('/displaySendPassword',function(request,response){
-
     if(loggedIn){
         response.render('displayDashboard', {title: 'SPSF - Dashboard',username:loggedUsername,loggedIn:loggedIn, signIn:false});
 
     }else{
         response.render('displaySendPassword', {title: 'SPSF - Forgot Password', username:loggedUsername,email:'',message:'',loggedIn:loggedIn, signIn:true});
     }
-
 })
 
 // process password recovery from posted data and ask service to send the recovery email
 app.post('/displaySendPassword',function(request,response){
-
     reqObject = spsfServiceUrl+"/sendpassword?email="+request.body.Email;
     req(reqObject,(err,result,body)=> {
         if(err){
@@ -177,42 +174,6 @@ app.post('/displaySendPassword',function(request,response){
             response.render('displaySendPassword', {title: 'SPSF - Forgot Password', username:loggedUsername,email:'',message:message,loggedIn:loggedIn, signIn:true});
         }          
     });
-})
-
-app.get('/reset-password/:id/:token', function(request, response){
-
-    // const fullUrl = request.originalUrl;
-    var fullUrl = request.originalUrl;
-
-    reqObject = spsfServiceUrl+"/reset-password"+fullUrl;
-    
-    // const { id, token } = request.params;
-
-    if(reqObject !== 'undefined'){
-    req(reqObject,(err,result,body)=> {
-        if(err){
-            return console.log(err);
-        }
-        if(response.reset ==='false'){
-            response.render('index', {title: 'SPSF - Home', username:loggedUsername,password:'',message:'',loggedIn:loggedIn, signIn:false});
-        }else{
-            //let message= JSON.parse(result.body).message;
-            response.render('displayResetPassword', {title: 'SPSF - Forgot Password', username:loggedUsername,password:'',confirmpassword:'',message:'',loggedIn:loggedIn, signIn:false});
-        }              
-    });
-    console.log('clicked');
-    console.log(fullUrl);
-}
-});
-
-// get reset password page to change password
-app.get('/displayResetPassword',function(request,response){
-    if(loggedIn){
-        response.render('displayDashboard', {title: 'SPSF - Dashboard',username:loggedUsername,loggedIn:loggedIn, signIn:false});
-
-    }else{
-        response.render('displayResetPassword', {title: 'SPSF - Forgot Password', username:loggedUsername,password:'',confirmpassword:'',message:'',loggedIn:loggedIn, signIn:true});
-    }
 })
 
 // process password recovery from posted data and ask service to send the recovery email
@@ -236,12 +197,14 @@ var fullUrl = request.originalUrl;
 })
 
 //get login page to sigin in to the app
+//login page 
 app.get('/login',function(request,response){
     response.render('index', {title: 'SPSF - Home', username:'',password:'',message:'',loggedIn:loggedIn, signIn:false});
     console.log('Auth failed!');
 });
 
 //get change password page to change user password
+//post data to change password 
 app.post('/changepassword', function(request, response){
     reqObject = spsfServiceUrl+"/changepassword?currentemail="+request.body.CurrentEmail+"&oldpassword="+request.body.OldPassword+"&newpassword="+request.body.NewPassword+"&confirmpassword="+request.body.ConfirmPassword;
     req(reqObject,(err,result,body)=> {
@@ -349,6 +312,7 @@ app.get('/displayParkingHistory',function(request,response){
     }
 });
 
+//display dashboard 
 app.post('/Login', function(request,response){
     if(request.body.Back ==='back'){
         response.render('displayDashboard', {title: 'SPSF - Dashboard',username:loggedUsername,loggedIn:loggedIn, signIn:false});
@@ -371,22 +335,24 @@ app.post('/notify',function(request,response){
     }
 })
 
-
+//call google authentication 
 app.get('/google', 
     passport.authenticate('google', { scope: ['email', 'profile'] }));
 
+//verify google callback & forward result 
 app.get('/google/callback', 
     passport.authenticate('google',{
         successRedirect: '/success',
         failureRedirect: '/failure'
 }));
 
-
+//if result failed from google
 app.get('/failure', (req, res) => {
     loggedIn=false;
     res.render('index', {title: 'SPSF - Home', username:loggedUsername,password:'',message:'',loggedIn:loggedIn, signIn:true});
 });
 
+//if result success from google 
 app.get('/success', (req, res) => {
     loggedIn=true;
     loggedUsername = req.user.displayName;
@@ -395,7 +361,7 @@ app.get('/success', (req, res) => {
 
 // user sign off from the system
 app.get('/logout',function(request,response){
-    request.logout();
+    request.logout(); //destroy session
     request.session.destroy();
     loggedIn=response.loggedIn;
     loggedUsername = '';
