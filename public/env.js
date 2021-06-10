@@ -181,18 +181,23 @@ initMap = function () {
 
 
 //seting up user current location on the map function
-getUserCurrentLocation = function (){
-
-  if (navigator.geolocation)
+getUserCurrentLocation = async function (){
+    
+if (navigator.geolocation)
   {
     navigator.geolocation.getCurrentPosition(function (position) {
       userLat = position.coords.latitude;
       userLong = position.coords.longitude;
+    }, function (e) {
+         alert(e);
+    }, {
+        enableHighAccuracy: true,
+        maximumAge: 10000
     });
     
   }else{
     alert('Geo location is not supported');
-  }
+  } 
 }
 
 //setting up available parking spot markers on the map function
