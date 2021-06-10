@@ -41,6 +41,8 @@
     "passport-local": "^1.0.0",
     "request": "^2.88.2",
     "socket.io": "^4.0.2",
-    "sweetalert2": "^11.0.16"
+    "sweetalert2": "^11.0.16",
+    "window": "^4.2.7",
+    "window-var": "^1.0.11"
   }
 }

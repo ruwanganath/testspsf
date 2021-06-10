@@ -11,8 +11,8 @@ const passport = require('passport');
 const mongoose = require('mongoose');
 const session = require('express-session');
 var MongoDBStore = require('connect-mongodb-session')(session);
-
 require('dotenv').config({path: __dirname + '/.env'})
+const { request } = require('http');
 
 //const {ensureAuthenticated, forwardAuthenticated} = require('./ensureAuth');
 
@@ -36,7 +36,6 @@ app.use(express.static(__dirname +'/public'));
 //use express boady parser to get view data
 app.use(express.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
-
 
 var loggedIn=false;
 var loggedUsername ='';
@@ -153,12 +152,14 @@ app.post('/displayRegister',function(request,response){
 
 // get forget password page to recover password
 app.get('/displaySendPassword',function(request,response){
+
     if(loggedIn){
         response.render('displayDashboard', {title: 'SPSF - Dashboard',username:loggedUsername,loggedIn:loggedIn, signIn:false});
 
     }else{
         response.render('displaySendPassword', {title: 'SPSF - Forgot Password', username:loggedUsername,email:'',message:'',loggedIn:loggedIn, signIn:true});
-    }false
+    }
+
 })
 
 // process password recovery from posted data and ask service to send the recovery email
@@ -169,12 +170,67 @@ app.post('/displaySendPassword',function(request,response){
         if(err){
             return console.log(err);
         }
-
         if(JSON.parse(result.body).registration ==='true'){
             response.render('index', {title: 'SPSF - Home', username:loggedUsername,password:'',message:'',loggedIn:loggedIn, signIn:false});
         }else{
             let message= JSON.parse(result.body).message;
             response.render('displaySendPassword', {title: 'SPSF - Forgot Password', username:loggedUsername,email:'',message:message,loggedIn:loggedIn, signIn:true});
+        }          
+    });
+})
+
+app.get('/reset-password/:id/:token', function(request, response){
+
+    // const fullUrl = request.originalUrl;
+    var fullUrl = request.originalUrl;
+
+    reqObject = spsfServiceUrl+"/reset-password"+fullUrl;
+    
+    // const { id, token } = request.params;
+
+    if(reqObject !== 'undefined'){
+    req(reqObject,(err,result,body)=> {
+        if(err){
+            return console.log(err);
+        }
+        if(response.reset ==='false'){
+            response.render('index', {title: 'SPSF - Home', username:loggedUsername,password:'',message:'',loggedIn:loggedIn, signIn:false});
+        }else{
+            //let message= JSON.parse(result.body).message;
+            response.render('displayResetPassword', {title: 'SPSF - Forgot Password', username:loggedUsername,password:'',confirmpassword:'',message:'',loggedIn:loggedIn, signIn:false});
+        }              
+    });
+    console.log('clicked');
+    console.log(fullUrl);
+}
+});
+
+// get reset password page to change password
+app.get('/displayResetPassword',function(request,response){
+    if(loggedIn){
+        response.render('displayDashboard', {title: 'SPSF - Dashboard',username:loggedUsername,loggedIn:loggedIn, signIn:false});
+
+    }else{
+        response.render('displayResetPassword', {title: 'SPSF - Forgot Password', username:loggedUsername,password:'',confirmpassword:'',message:'',loggedIn:loggedIn, signIn:true});
+    }
+})
+
+// process password recovery from posted data and ask service to send the recovery email
+app.post('/displayResetPassword',function(request,response){
+
+var fullUrl = request.originalUrl;
+
+    reqObject = spsfServiceUrl+"/reset-password/?password="+request.body.Password+"&confirmpassword="+request.body.ConfirmPassword+"&message="+fullUrl;
+
+    req(reqObject,(err,result,body)=> {
+        if(err){
+            return console.log(err);
+        }
+        if(JSON.parse(result.body).shift ==='true'){
+            response.render('index', {title: 'SPSF - Home', username:loggedUsername,password:'',message:'',loggedIn:loggedIn, signIn:false});
+        }else{
+            let message= JSON.parse(result.body).message;
+            response.render('displayResetPassword', {title: 'SPSF - Forgot Password', username:loggedUsername,password:'',confirmpassword:'',message:'',loggedIn:loggedIn, signIn:true});
         }              
     });
 })
@@ -336,17 +392,6 @@ app.get('/success', (req, res) => {
     loggedUsername = req.user.displayName;
     res.render('displayDashboard', {title: 'SPSF - Dashboard',username:loggedUsername,loggedIn:loggedIn, signIn:false});
 })
-
-// app.get('/logged', (req, res) => {
-//     loggedIn=false;
-//     res.render('index', {title: 'SPSF - Home', username:loggedUsername,password:'',message:'',loggedIn:loggedIn, signIn:true});
-// });
-
-// app.get('/rejected', (req, res) => {
-//     loggedIn=true;
-//     loggedUsername = req.user.displayName;
-//     res.render('displayDashboard', {title: 'SPSF - Dashboard',username:loggedUsername,loggedIn:loggedIn, signIn:false});
-// })
 
 // user sign off from the system
 app.get('/logout',function(request,response){
