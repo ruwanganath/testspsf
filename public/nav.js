@@ -151,9 +151,9 @@ function navigate_to_location(sel_lat,sel_long)
       //console.log(getRoutes);
       //console.log(routes.steps[i].instructions);
 //display step by step directions to user inside the map 
-    var navigateHTML="<table class='table table-striped'><tr><th>Your Steps</th></tr>";
+    var navigateHTML="<div id='history_info' style='width: 100%;height:100%;overflow-y:auto'><table class='table table-striped'><tr><th>Your Steps</th></tr>";
       navigateHTML+="<tr>";
-      navigateHTML+="<td>"+'Distance '+getRoute.distance.text+' '+'Duration '+getRoute.duration.text+' '; //add distance and duration 
+      navigateHTML+="<td>"+'Distance '+getRoute.distance.text+' '+'Duration '+getRoute.duration.text+' ';
       navigateHTML+="</td>";
       navigateHTML+="</tr>"; 
 
@@ -167,13 +167,11 @@ function navigate_to_location(sel_lat,sel_long)
     console.log(getRoute);
 
     getRoute.steps.instructions+="</table></div>"
-    document.getElementById("navigate_data").innerHTML=navigateHTML;
-
-    }
+    document.getElementById("navigate_data").innerHTML=navigateHTML;}
     else
     {
       console.log("Direction request failed:"+status);
     }
-
+    
   });
 }
