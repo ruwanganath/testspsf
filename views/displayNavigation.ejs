@@ -7,6 +7,7 @@
   <script type='text/javascript'>
     var select_lat = "<%= slat %>";
     var select_lon = "<%= slon %>";
+    
   </script>
 
 </head>
@@ -27,9 +28,22 @@
 
   <script src="nav.js"></script>
   <script type="text/javascript">
+    //getUpdatedAvailableParkingData();
     setInterval(function(){
       initMap();
       navigate_to_location(select_lat,select_lon);
+    
+      getUpdatedAvailableParkingData();
+
+      if(!isAvailable)
+      {
+        alert("Parking Bay is not available");
+      }
+
+      isAvailable=false;
+
+      
+
     },120000);  
   
   </script>

@@ -6,6 +6,7 @@ let userLong = 144.946457;
 let mapZoom=12;
 let directionsDisplay;
 let directionsService;
+let isAvailable=false;
 
 $(document).ready(function () {
 
@@ -66,7 +67,61 @@ function initMap() {
   });
 
   
+  getUpdatedAvailableParkingData = function(){
+ 
+    $.ajax({
+      url: '/getAllAvailableParkingData',
+      method: "GET",
+      success: function(data) {
+  
+        let arrayNearestParking = [];
+        jsonData = JSON.parse(data);
+        var keys = Object.keys(jsonData);
 
+        keys.forEach(function(key,index){
+          //console.log(jsonData[key].lat);
+
+          if( (jsonData[key].lat==select_lat) && (jsonData[key].lon==select_lon)){
+            isAvailable=true
+          }
+
+        });
+  
+        //setting up user marker
+        // let userLatLng = { lat: parseFloat(userLat), lng: parseFloat(userLong)};
+        // new google.maps.Marker({
+        //   position: userLatLng,
+        //   icon: "/images/yous.png",
+        //   map,
+        //   title: 'Your Current Location',            
+        // });
+      
+        // keys.forEach(function(key,index){
+          
+        //     let myLatLng = { lat: parseFloat(jsonData[key].lat), lng: parseFloat(jsonData[key].lon)};
+        //     let custIcon='';
+        //     if(jsonData[key].type ==='on'){
+        //       custIcon = "/images/ons.png";
+        //     }else if(jsonData[key].type === 'off'){
+        //       custIcon = "/images/offs.png";
+        //     }else{
+        //       custIcon = "/images/opts.png";
+        //     }
+        //     if(index !==0){  
+        //       new google.maps.Marker({
+        //         position: myLatLng,
+        //         icon: custIcon,
+        //         map,
+        //         title: 'Bay/Base Property - '+jsonData[key].bay+' - '+jsonData[key].type+'-Street Parking',            
+        //       });        
+        //     }
+        // });
+        //   arrayNearestParking = getNearestParkingSpots(parseFloat(userLat),parseFloat(userLong),data)
+        //   updateParkingList(arrayNearestParking);
+        //   updateParkingInfoPanel(arrayNearestParking);
+      }
+    });
+  }
 
   //navigate_to_location(select_lat,select_lon);
   // Create a renderer for directions and bind it to the map.
