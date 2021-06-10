@@ -7,29 +7,36 @@ let io = require('socket.io')(http);
 
 const req = require('request');
 const ejs = require('ejs');
-const Swal = require('sweetalert2');
 const passport = require('passport');
 const mongoose = require('mongoose');
 const session = require('express-session');
+var MongoDBStore = require('connect-mongodb-session')(session);
+
+require('dotenv').config({path: __dirname + '/.env'})
 
 //const {ensureAuthenticated, forwardAuthenticated} = require('./ensureAuth');
 
 //require('../spsf_service/config/auth');
 
 var port = process.env.PORT || 3000;   
-//var spsfServiceUrl = 'https://spsfservice.us-south.cf.appdomain.cloud';
-var spsfServiceUrl = 'http://localhost:8080';
-const uri = "mongodb+srv://sit780:sit780@vaccinetracker.4wro0.mongodb.net/account?retryWrites=true&w=majority";
+
+var spsfServiceUrl = process.env.SERVICE_URL
+const uri = process.env.MONGOOSE
+
+var store = new MongoDBStore({
+    uri: uri,
+    collection: 'spsfSessions'
+  });
+
+store.on('error', function(error) {
+console.log(error);
+});
 
 app.use(express.static(__dirname +'/public'));
 //use express boady parser to get view data
 app.use(express.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
-require('dotenv').config({path: __dirname + '/.env'})
 
-var port = process.env.PORT || 3000;   
-//var spsfServiceUrl = 'https://spsfservice.us-south.cf.appdomain.cloud';
-var spsfServiceUrl = 'http://localhost:8080';
 
 var loggedIn=false;
 var loggedUsername ='';
@@ -69,8 +76,9 @@ try {
 //express session
 app.use(session({
     secret: "key to cookie",
+    store:store,
     resave: true,
-    saveUninitialized: true,
+    saveUninitialized: true,    
   })
 );
 
@@ -171,11 +179,13 @@ app.post('/displaySendPassword',function(request,response){
     });
 })
 
+//get login page to sigin in to the app
 app.get('/login',function(request,response){
     response.render('index', {title: 'SPSF - Home', username:'',password:'',message:'',loggedIn:loggedIn, signIn:false});
     console.log('Auth failed!');
 });
 
+//get change password page to change user password
 app.post('/changepassword', function(request, response){
     reqObject = spsfServiceUrl+"/changepassword?currentemail="+request.body.CurrentEmail+"&oldpassword="+request.body.OldPassword+"&newpassword="+request.body.NewPassword+"&confirmpassword="+request.body.ConfirmPassword;
     req(reqObject,(err,result,body)=> {
@@ -195,6 +205,14 @@ app.post('/changepassword', function(request, response){
         }              
     }); 
 })
+
+//process user dashboard funtionality and route the user to the dessired page
+app.get('/displayDashboard', function(request,response){
+    if(loggedIn){
+        response.render('displayDashboard', {title: 'SPSF - Dashboard',username:loggedUsername,loggedIn:loggedIn, signIn:false});
+    }
+})
+
 
 //process user dashboard funtionality and route the user to the dessired page
 app.post('/displayDashboard', function(request,response){
@@ -281,6 +299,7 @@ app.post('/Login', function(request,response){
     }
 });
 
+//handling notification feature of the navigation page
 app.post('/notify',function(request,response){
 
     if(loggedIn){

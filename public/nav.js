@@ -7,12 +7,32 @@ let mapZoom=12;
 let directionsDisplay;
 let directionsService;
 let isAvailable=false;
+var getRoute; 
 
 $(document).ready(function () {
 
+  //geting user current location
+  getUserCurrentLocation();
+
+  //navigate_to_location(select_lat,select_lon);
+  $('.bs-timepicker').timepicker();
+
+    //handling recenter feature of the parking map page
+    $( "#btn-viewme" ).click(function() {
+       //geting user current location
+      getUserCurrentLocation();
+      map.zoom = 15;
+      map.panTo({ lat: parseFloat(userLat), lng: parseFloat(userLong)}) 
+  });
+
+});
+  
+//seting up user current location on the map function
+getUserCurrentLocation = function (){
+
   if (navigator.geolocation)
   {
-    navigator.geolocation.getCurrentPosition(function(position){
+    navigator.geolocation.getCurrentPosition(function (position) {
       userLat = position.coords.latitude;
       userLong = position.coords.longitude;
     });
@@ -20,13 +40,7 @@ $(document).ready(function () {
   }else{
     alert('Geo location is not supported');
   }
-
-  //navigate_to_location(select_lat,select_lon);
-  $('.bs-timepicker').timepicker();
-
-});
-  
- 
+}
 
 function initMap() {
   const markerArray = [];
@@ -53,6 +67,18 @@ function initMap() {
     zoom: parseFloat(mapZoom),
     center: { lat: parseFloat(userLat), lng: parseFloat(userLong) },
     streetViewControl:false,
+    mapTypeControl: false,
+    styles:[
+      {
+        featureType: "poi.business",
+        stylers: [{ visibility: "off" }],
+      },
+      {
+        featureType: "transit",
+        elementType: "labels.icon",
+        stylers: [{ visibility: "off" }],
+      },
+    ],
   });
 
   
@@ -160,11 +186,6 @@ $(window).on('load',function()
 
 function navigate_to_location(sel_lat,sel_long)
 {
-
-
-  console.log(userLat);
-  console.log(userLong);
-
   var start=new google.maps.LatLng(parseFloat(userLat),parseFloat(userLong));
 
   var end = new google.maps.LatLng(parseFloat(sel_lat),parseFloat(sel_long));
@@ -178,12 +199,35 @@ function navigate_to_location(sel_lat,sel_long)
     origin: start,
     destination: end,
     travelMode: google.maps.TravelMode.DRIVING
-  };
+  }; 
+
   directionsService.route(request,function(response,status){
     if(status==google.maps.DirectionsStatus.OK)
     {
       directionsDisplay.setDirections(response);
       directionsDisplay.setMap(map);
+      getRoute = response.routes[0].legs[0];
+      //console.log(getRoutes);
+      //console.log(routes.steps[i].instructions);
+      
+    var navigateHTML="<div id='history_info' style='width: 100%;height:100%;overflow-y:auto'><table class='table table-striped'><tr><th>Your Steps</th></tr>";
+      navigateHTML+="<tr>";
+      navigateHTML+="<td>"+'Distance '+getRoute.distance.text+' '+'Duration '+getRoute.duration.text+' ';
+      navigateHTML+="</td>";
+      navigateHTML+="</tr>"; 
+
+    for(var i=0; i < getRoute.steps.length; i++){
+      console.log(getRoute.steps[i].instructions+ ' -> ' +getRoute.steps[i].distance.value);
+      navigateHTML+="<tr>";
+      navigateHTML+="<td>"+getRoute.steps[i].instructions+' -> '+"</td>";
+      navigateHTML+="</tr>";
+    }
+
+    console.log(getRoute);
+
+    getRoute.steps.instructions+="</table></div>"
+    document.getElementById("navigate_data").innerHTML=navigateHTML;
+
     }
     else
     {
@@ -191,70 +235,4 @@ function navigate_to_location(sel_lat,sel_long)
     }
 
   });
-
-}
-
-function calculateAndDisplayRoute(
-  directionsRenderer,
-  directionsService,
-  markerArray,
-  stepDisplay,
-  map
-) {
-  // First, remove any existing markers from the map.
-  for (let i = 0; i < markerArray.length; i++) {
-    markerArray[i].setMap(null);
-  }
-  // Retrieve the start and end locations and create a DirectionsRequest using
-  // WALKING directions.
-  directionsService.route(
-    {
-      origin: document.getElementById("start").value,
-      destination: document.getElementById("end").value,
-      travelMode: google.maps.TravelMode.WALKING,
-    },
-    (result, status) => {
-      // Route the directions and pass the response to a function to create
-      // markers for each step.
-      if (status === "OK" && result) {
-        document.getElementById("warnings-panel").innerHTML =
-          "<b>" + result.routes[0].warnings + "</b>";
-        directionsRenderer.setDirections(result);
-        showSteps(result, markerArray, stepDisplay, map);
-      } else {
-        window.alert("Directions request failed due to " + status);
-      }
-    }
-  );
-}
-
-function showSteps(directionResult, markerArray, stepDisplay, map) {
-  // For each step, place a marker, and add the text to the marker's infowindow.
-  // Also attach the marker to an array so we can keep track of it and remove it
-  // when calculating new routes.
-  const myRoute = directionResult.routes[0].legs[0];
-
-  for (let i = 0; i < myRoute.steps.length; i++) {
-    const marker = (markerArray[i] =
-      markerArray[i] || new google.maps.Marker());
-    marker.setMap(map);
-    marker.setPosition(myRoute.steps[i].start_location);
-    attachInstructionText(
-      stepDisplay,
-      marker,
-      myRoute.steps[i].instructions,
-      map
-    );
-  }
-}
-
-function attachInstructionText(stepDisplay, marker, text, map) {
-  google.maps.event.addListener(marker, "click", () => {
-    // Open an info window when the marker is clicked on, containing the text
-    // of the step.
-    stepDisplay.setContent(text);
-    stepDisplay.open(map, marker);
-  });
-
-
 }
