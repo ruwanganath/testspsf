@@ -349,6 +349,16 @@ header .header-btn{
 }
 
 .navlistpanel{
+    height: 320px;
+    width: 100%;
+    display: block;
+    float: left;
+    padding: 2px;
+    background-color: #D9D9D9;
+    margin-bottom: 4px;
+}
+
+.historylistpanel{
     height: 374px;
     width: 100%;
     display: block;
@@ -371,7 +381,7 @@ header .header-btn{
 .navinfopanel{
     background-color: #D9D9D9;
     border-bottom-right-radius: 10px;
-    height: 15%;
+    height: 94%;
     width: 100%;
     padding: 2px;
     float: left;
@@ -465,9 +475,10 @@ height: 86%;
 }
 
 .parkinglistpanel p{
-	margin-bottom: 1px;
-	display: block;
-	float: left;
+    margin-bottom: 3px;
+    display: block;
+    float: left;
+    height: 30px;
 }
 
 table {

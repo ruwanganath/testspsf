@@ -6,6 +6,7 @@ let userLong = 144.946457;
 let mapZoom=12;
 let directionsDisplay;
 let directionsService;
+var getRoute; 
 
 $(document).ready(function () {
 
@@ -100,12 +101,35 @@ function navigate_to_location(sel_lat,sel_long)
     origin: start,
     destination: end,
     travelMode: google.maps.TravelMode.DRIVING
-  };
+  }; 
+
   directionsService.route(request,function(response,status){
     if(status==google.maps.DirectionsStatus.OK)
     {
       directionsDisplay.setDirections(response);
       directionsDisplay.setMap(map);
+      getRoute = response.routes[0].legs[0];
+      //console.log(getRoutes);
+      //console.log(routes.steps[i].instructions);
+      
+    var navigateHTML="<div id='history_info' style='width: 100%;height:100%;overflow-y:auto'><table class='table table-striped'><tr><th>Your Steps</th></tr>";
+      navigateHTML+="<tr>";
+      navigateHTML+="<td>"+'Distance '+getRoute.distance.text+' '+'Duration '+getRoute.duration.text+' ';
+      navigateHTML+="</td>";
+      navigateHTML+="</tr>"; 
+
+    for(var i=0; i < getRoute.steps.length; i++){
+      console.log(getRoute.steps[i].instructions+ ' -> ' +getRoute.steps[i].distance.value);
+      navigateHTML+="<tr>";
+      navigateHTML+="<td>"+getRoute.steps[i].instructions+' -> '+"</td>";
+      navigateHTML+="</tr>";
+    }
+
+    console.log(getRoute);
+
+    getRoute.steps.instructions+="</table></div>"
+    document.getElementById("navigate_data").innerHTML=navigateHTML;
+
     }
     else
     {

@@ -144,6 +144,7 @@ $(document).ready(function () {
    initParkingInfoPanel();
 })
 
+
 initMap = function () {
 
   //update user loaction to get current user location
