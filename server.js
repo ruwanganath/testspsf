@@ -10,7 +10,7 @@ const ejs = require('ejs');
 const passport = require('passport');
 const mongoose = require('mongoose');
 const session = require('express-session');
-const MongoStore = require('connect-mongo');
+var MongoDBStore = require('connect-mongodb-session')(session);
 
 require('dotenv').config({path: __dirname + '/.env'})
 
@@ -22,6 +22,15 @@ var port = process.env.RUNNING_PORT || 3000;
 
 var spsfServiceUrl = process.env.SERVICE_URL
 const uri = process.env.MONGOOSE
+
+var store = new MongoDBStore({
+    uri: uri,
+    collection: 'spsfSessions'
+  });
+
+store.on('error', function(error) {
+console.log(error);
+});
 
 app.use(express.static(__dirname +'/public'));
 //use express boady parser to get view data
@@ -67,9 +76,9 @@ try {
 //express session
 app.use(session({
     secret: "key to cookie",
+    store:store,
     resave: true,
-    saveUninitialized: true,
-    store: MongoStore.create({ mongoUrl: process.env.MONGOOSE})
+    saveUninitialized: true,    
   })
 );
 
