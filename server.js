@@ -10,6 +10,8 @@ const ejs = require('ejs');
 const passport = require('passport');
 const mongoose = require('mongoose');
 const session = require('express-session');
+const MongoStore = require('connect-mongo');
+
 require('dotenv').config({path: __dirname + '/.env'})
 
 //const {ensureAuthenticated, forwardAuthenticated} = require('./ensureAuth');
@@ -67,6 +69,7 @@ app.use(session({
     secret: "key to cookie",
     resave: true,
     saveUninitialized: true,
+    store: MongoStore.create({ mongoUrl: process.env.MONGOOSE})
   })
 );
 
