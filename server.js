@@ -18,7 +18,7 @@ require('dotenv').config({path: __dirname + '/.env'})
 
 //require('../spsf_service/config/auth');
 
-var port = process.env.RUNNING_PORT || 3000;   
+var port = process.env.PORT || 3000;   
 
 var spsfServiceUrl = process.env.SERVICE_URL
 const uri = process.env.MONGOOSE
