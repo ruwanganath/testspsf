@@ -12,6 +12,7 @@ let calculateDistanceFunctionUrl='https://us-south.functions.appdomain.cloud/api
 
 $(document).ready(function () {
   
+  getUserCurrentLocation()
   //handling the drop down menu in the parking available map page to show available parking in the selected suburb
   $("#suburblist").change(function(){
  
