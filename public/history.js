@@ -5,7 +5,7 @@ let userLat = -37.840935;
 let userLong = 144.946457;
 let mapZoom=12;
 let dup_history_data;
-let marker_array=[]
+let marker_array=[]; // Store the lattitudes and logitues of the places in history
 let directionsDisplay;
 let directionsService;
 
@@ -76,6 +76,8 @@ function initMap() {
   
 }
 
+
+//Zooming to a particular location
 function zoomTolocation(loc_index)
 {
   //var bounds=new google.maps.LatLngBounds();
@@ -91,6 +93,8 @@ function setHistoryData(historydata)
   dup_history_data=historydata;
 }
 
+
+//Draw the path between the given two locations
 function navigate_to_location()
 {
   var start=new google.maps.LatLng(parseFloat(userLat),parseFloat(userLong));

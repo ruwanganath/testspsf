@@ -94,7 +94,7 @@ function initMap() {
 
   
   getUpdatedAvailableParkingData = function(){
- 
+    // Fetching Parking data from the ajax server
     $.ajax({
       url: '/getAllAvailableParkingData',
       method: "GET",
@@ -113,70 +113,11 @@ function initMap() {
 
         });
   
-        //setting up user marker
-        // let userLatLng = { lat: parseFloat(userLat), lng: parseFloat(userLong)};
-        // new google.maps.Marker({
-        //   position: userLatLng,
-        //   icon: "/images/yous.png",
-        //   map,
-        //   title: 'Your Current Location',            
-        // });
-      
-        // keys.forEach(function(key,index){
-          
-        //     let myLatLng = { lat: parseFloat(jsonData[key].lat), lng: parseFloat(jsonData[key].lon)};
-        //     let custIcon='';
-        //     if(jsonData[key].type ==='on'){
-        //       custIcon = "/images/ons.png";
-        //     }else if(jsonData[key].type === 'off'){
-        //       custIcon = "/images/offs.png";
-        //     }else{
-        //       custIcon = "/images/opts.png";
-        //     }
-        //     if(index !==0){  
-        //       new google.maps.Marker({
-        //         position: myLatLng,
-        //         icon: custIcon,
-        //         map,
-        //         title: 'Bay/Base Property - '+jsonData[key].bay+' - '+jsonData[key].type+'-Street Parking',            
-        //       });        
-        //     }
-        // });
-        //   arrayNearestParking = getNearestParkingSpots(parseFloat(userLat),parseFloat(userLong),data)
-        //   updateParkingList(arrayNearestParking);
-        //   updateParkingInfoPanel(arrayNearestParking);
+    
       }
     });
   }
 
-  //navigate_to_location(select_lat,select_lon);
-  // Create a renderer for directions and bind it to the map.
-  // const directionsRenderer = new google.maps.DirectionsRenderer({ map: map });
-  // // Instantiate an info window to hold step text.
-  // const stepDisplay = new google.maps.InfoWindow();
-  // // Display the route between the initial start and end selections.
-  // calculateAndDisplayRoute(
-  //   directionsRenderer,
-  //   directionsService,
-  //   markerArray,
-  //   stepDisplay,
-  //   map
-  // );
-
-  // // Listen to change events from the start and end lists.
-  // const onChangeHandler = function () {
-  //   calculateAndDisplayRoute(
-  //     directionsRenderer,
-  //     directionsService,
-  //     markerArray,
-  //     stepDisplay,
-  //     map
-  //   );
-  // };
-
-
-  // document.getElementById("start").addEventListener("change", onChangeHandler);
-  // document.getElementById("end").addEventListener("change", onChangeHandler);
 }
 
 $(window).on('load',function()

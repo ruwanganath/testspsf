@@ -5,6 +5,7 @@
   <%- include("partials/head",title) %>
 
   <script type='text/javascript'>
+
     var select_lat = "<%= slat %>";
     var select_lon = "<%= slon %>";
     
@@ -28,7 +29,7 @@
 
   <script src="nav.js"></script>
   <script type="text/javascript">
-    //getUpdatedAvailableParkingData();
+    //Perodically update the map and check the bay availability
     setInterval(function(){
       initMap();
       navigate_to_location(select_lat,select_lon);
