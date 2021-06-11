@@ -20,7 +20,16 @@ $(document).ready(function () {
     //handling recenter feature of the parking map page
   $( "#btn-viewme" ).click(function() {
        //geting user current location
-      getUserCurrentLocation();
+    if (navigator.geolocation)
+    {
+    navigator.geolocation.getCurrentPosition(function(position){
+      userLat = position.coords.latitude;
+      userLong = position.coords.longitude;
+    });
+    
+  }else{
+    alert('Geo location is not supported');
+  }
       map.zoom = 15;
       map.panTo({ lat: parseFloat(userLat), lng: parseFloat(userLong)}) 
   });
