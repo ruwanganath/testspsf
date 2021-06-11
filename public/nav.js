@@ -158,7 +158,7 @@ function navigate_to_location(sel_lat,sel_long)
   var bounds=new google.maps.LatLngBounds();
   bounds.extend(start);
   bounds.extend(end);
-  map.fitBounds(bounds);
+  //map.fitBounds(bounds);
 
   var request={
     origin: start,
