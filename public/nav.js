@@ -85,18 +85,7 @@ function initMap() {
   // Instantiate a directions service.
   //const directionsService = new google.maps.DirectionsService();
   // Create a map and center it on Manhattan.
-
-  if (navigator.geolocation)
-  {
-    navigator.geolocation.getCurrentPosition(function(position){
-      userLat = position.coords.latitude;
-      userLong = position.coords.longitude;
-    });
-    
-  }else{
-    alert('Geo location is not supported');
-  }
-
+  getUserCurrentLocation()
 
   directionsService = new google.maps.DirectionsService();
   directionsDisplay=new google.maps.DirectionsRenderer();
