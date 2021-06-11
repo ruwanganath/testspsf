@@ -11,8 +11,7 @@ let socket = io();
 let calculateDistanceFunctionUrl='https://us-south.functions.appdomain.cloud/api/v1/web/ruwanganath%40hotmail.com_dev/default/getDistanceToParkingSpot'
 
 $(document).ready(function () {
-  
-  getUserCurrentLocation()
+
   //handling the drop down menu in the parking available map page to show available parking in the selected suburb
   $("#suburblist").change(function(){
  
@@ -194,8 +193,9 @@ if (navigator.geolocation)
     }, function (e) {
          alert(e);
     }, {
-        enableHighAccuracy: true,
-        maximumAge: 10000
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0
     });
     
   }else{

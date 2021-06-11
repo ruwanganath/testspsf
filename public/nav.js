@@ -14,9 +14,6 @@ let calculateDistanceFunctionUrl='https://us-south.functions.appdomain.cloud/api
 
 $(document).ready(function () {
 
-  //geting user current location
-  getUserCurrentLocation();
-
   //navigate_to_location(select_lat,select_lon);
   $('.bs-timepicker').timepicker();
 
@@ -54,19 +51,25 @@ $(document).ready(function () {
   })
   
 //seting up user current location on the map function
-getUserCurrentLocation = function (){
-
-  if (navigator.geolocation)
-  {
-    navigator.geolocation.getCurrentPosition(function (position) {
-      userLat = position.coords.latitude;
-      userLong = position.coords.longitude;
-    });
+getUserCurrentLocation = async function (){
     
-  }else{
-    alert('Geo location is not supported');
+  if (navigator.geolocation)
+    {
+      navigator.geolocation.getCurrentPosition(function (position) {
+        userLat = position.coords.latitude;
+        userLong = position.coords.longitude;
+      }, function (e) {
+           alert(e);
+      }, {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0
+      });
+      
+    }else{
+      alert('Geo location is not supported');
+    } 
   }
-}
 
 function initMap() {
   const markerArray = [];
