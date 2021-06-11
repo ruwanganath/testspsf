@@ -27,7 +27,7 @@ $(document).ready(function () {
 });
 
   //save parking history
-  $("#btn-notify").click(function() {
+/*   $("#btn-notify").click(function() {
 
  
     var slat = document.getElementById("slat").value
@@ -48,7 +48,7 @@ $(document).ready(function () {
           }               
         }      
       })
-  })
+  }) */
   
 //seting up user current location on the map function
 getUserCurrentLocation = async function (){
