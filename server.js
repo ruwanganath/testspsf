@@ -91,7 +91,7 @@ function isLoggedIn(req, res, next) {
     req.user ? next() : res.redirect('/login');
 }
 
-//spsf index page to sign in (landing or the signin page)
+ //spsf index page to sign in (landing or the signin page)
 app.get('/', isLoggedIn, (request,response) => {
     if(loggedIn){
         response.render('displayDashboard', {title: 'SPSF - Dashboard',username:loggedUsername,loggedIn:loggedIn, signIn:false});
@@ -254,7 +254,7 @@ app.post('/parkingMapRoutesMidPanel',function(request,response){
 
     if(loggedIn){
         if (request.body.Navigate==='navigate'){
-                response.render('displayNavigation', {title: 'SPSF - Display Navigation', username:loggedUsername,loggedIn:loggedIn, timer:'', signIn:false, mobileno:'', navArray:request.body.NavArray, navArrayIndex: request.body.NavArrayIndex,slat:request.body.sel_lat,slon:request.body.sel_lon});
+                response.render('displayNavigation', {title: 'SPSF - Display Navigation', username:loggedUsername,loggedIn:loggedIn, timer:'', signIn:false, mobileno:'', bay:request.body.bay,slat:request.body.sel_lat,slon:request.body.sel_lon});
             }       
     }else{
         response.render('index', {title: 'SPSF - Home', username:loggedUsername,password:'',message:'',loggedIn:loggedIn, signIn:false});
@@ -304,12 +304,12 @@ app.post('/notify',function(request,response){
 
     if(loggedIn){
         if (request.body.Notify==='notify'){
-            reqObject = spsfServiceUrl+"/notify?mobile="+request.body.Mobile+"&time="+request.body.Time;
+            reqObject = spsfServiceUrl+"/notify?mobile="+request.body.Mobile+"&time="+request.body.Time+"&bay="+request.body.Bay+"&lat="+request.body.Slat+"&lon="+request.body.Slon+"&username="+request.body.Username+"&save="+request.body.SaveHistory;
             req(reqObject,(err,result,body)=> {
                 if(err){
                     return console.log(err);
-                }  
-               response.render('displayDashboard', {title: 'SPSF - Dashboard',username:loggedUsername,loggedIn:loggedIn, signIn:false});                                                
+                }   
+                response.render('displayDashboard', {title: 'SPSF - Dashboard',username:loggedUsername,loggedIn:loggedIn, signIn:false});                                                
             })
         } 
     }

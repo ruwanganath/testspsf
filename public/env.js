@@ -390,8 +390,7 @@ let descTwo;
     $("#desctwo").text(descTwo);
     $("#info1-lat").val(array[0].lat);
     $("#info1-lon").val(array[0].lon);
-    document.getElementById("navarray").value = JSON.stringify(array[0]);
-    document.getElementById("navarrayindexselected").value = listNo; 
+    document.getElementById("bay-id").value = bay;
   });
   $( "#btn-info2" ).click(function() {
     listNo = '2';
@@ -409,8 +408,7 @@ let descTwo;
     $("#desctwo").text(descTwo);
     $("#info2-lat").val(array[1].lat);
     $("#info2-lon").val(array[1].lon);
-    document.getElementById("navarray").value = JSON.stringify(array[1]);
-    document.getElementById("navarrayindexselected").value = listNo;
+    document.getElementById("bay-id").value = bay;
   });
   $( "#btn-info3" ).click(function() {
     listNo = '3';
@@ -428,8 +426,7 @@ let descTwo;
     $("#desctwo").text(descTwo);
     $("#info3-lat").val(array[2].lat);
     $("#info3-lon").val(array[2].lon);
-    document.getElementById("navarray").value = JSON.stringify(array[2]);
-    document.getElementById("navarrayindexselected").value = listNo;
+    document.getElementById("bay-id").value = bay;
   });
   $( "#btn-info4" ).click(function() {
     listNo = '4';
@@ -447,8 +444,7 @@ let descTwo;
     $("#desctwo").text(descTwo);
     $("#info4-lat").val(array[3].lat);
     $("#info4-lon").val(array[3].lon);
-    document.getElementById("navarray").value = JSON.stringify(array[3]);
-    document.getElementById("navarrayindexselected").value = listNo;
+    document.getElementById("bay-id").value = bay;
   });
   $( "#btn-info5" ).click(function() {
     listNo = '5';
@@ -466,8 +462,7 @@ let descTwo;
     $("#desctwo").text(descTwo);
     $("#info5-lat").val(array[4].lat);
     $("#info5-lon").val(array[4].lon);
-    document.getElementById("navarray").value = JSON.stringify(array[4]);
-    document.getElementById("navarrayindexselected").value = listNo;
+    document.getElementById("bay-id").value = bay;
   });
 
 }

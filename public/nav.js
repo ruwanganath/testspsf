@@ -8,6 +8,9 @@ let directionsDisplay;
 let directionsService;
 let isAvailable=false;
 var getRoute; 
+//function as a service to calculate distance among given coordinates
+let calculateDistanceFunctionUrl='https://us-south.functions.appdomain.cloud/api/v1/web/ruwanganath%40hotmail.com_dev/default/getDistanceToParkingSpot'
+
 
 $(document).ready(function () {
 
@@ -18,14 +21,37 @@ $(document).ready(function () {
   $('.bs-timepicker').timepicker();
 
     //handling recenter feature of the parking map page
-    $( "#btn-viewme" ).click(function() {
+  $( "#btn-viewme" ).click(function() {
        //geting user current location
       getUserCurrentLocation();
       map.zoom = 15;
       map.panTo({ lat: parseFloat(userLat), lng: parseFloat(userLong)}) 
   });
-
 });
+
+  //save parking history
+  $("#btn-notify").click(function() {
+
+ 
+    var slat = document.getElementById("slat").value
+    var slon = document.getElementById("slon").value
+
+    $.ajax({
+        url: calculateDistanceFunctionUrl,
+        method: "GET",
+        dataType: 'json',
+        async:true,
+        data: "userLatitude="+userLat+"&userLongitude="+userLong+"&parkingLat="+parseFloat(slat)+"&parkingLon="+parseFloat(slon),
+        success: function(data) {
+          data = JSON.stringify(data);
+          data = JSON.parse(data);
+          let distance = parseFloat(data.dist) *1000   
+          if(data.res===false){
+            alert("You are "+distance+"m from the parking location. You must be with in 50m of the parking spot to use this service.") 
+          }               
+        }      
+      })
+  })
   
 //seting up user current location on the map function
 getUserCurrentLocation = function (){
@@ -92,7 +118,7 @@ function initMap() {
     title: '',            
   });
 
-  
+  // get updated available parking
   getUpdatedAvailableParkingData = function(){
  
     $.ajax({
@@ -105,84 +131,21 @@ function initMap() {
         var keys = Object.keys(jsonData);
 
         keys.forEach(function(key,index){
-          //console.log(jsonData[key].lat);
-
           if( (jsonData[key].lat==select_lat) && (jsonData[key].lon==select_lon)){
             isAvailable=true
           }
 
-        });
-  
-        //setting up user marker
-        // let userLatLng = { lat: parseFloat(userLat), lng: parseFloat(userLong)};
-        // new google.maps.Marker({
-        //   position: userLatLng,
-        //   icon: "/images/yous.png",
-        //   map,
-        //   title: 'Your Current Location',            
-        // });
-      
-        // keys.forEach(function(key,index){
-          
-        //     let myLatLng = { lat: parseFloat(jsonData[key].lat), lng: parseFloat(jsonData[key].lon)};
-        //     let custIcon='';
-        //     if(jsonData[key].type ==='on'){
-        //       custIcon = "/images/ons.png";
-        //     }else if(jsonData[key].type === 'off'){
-        //       custIcon = "/images/offs.png";
-        //     }else{
-        //       custIcon = "/images/opts.png";
-        //     }
-        //     if(index !==0){  
-        //       new google.maps.Marker({
-        //         position: myLatLng,
-        //         icon: custIcon,
-        //         map,
-        //         title: 'Bay/Base Property - '+jsonData[key].bay+' - '+jsonData[key].type+'-Street Parking',            
-        //       });        
-        //     }
-        // });
-        //   arrayNearestParking = getNearestParkingSpots(parseFloat(userLat),parseFloat(userLong),data)
-        //   updateParkingList(arrayNearestParking);
-        //   updateParkingInfoPanel(arrayNearestParking);
-      }
+        });  
+       }
     });
   }
-
-  //navigate_to_location(select_lat,select_lon);
-  // Create a renderer for directions and bind it to the map.
-  // const directionsRenderer = new google.maps.DirectionsRenderer({ map: map });
-  // // Instantiate an info window to hold step text.
-  // const stepDisplay = new google.maps.InfoWindow();
-  // // Display the route between the initial start and end selections.
-  // calculateAndDisplayRoute(
-  //   directionsRenderer,
-  //   directionsService,
-  //   markerArray,
-  //   stepDisplay,
-  //   map
-  // );
-
-  // // Listen to change events from the start and end lists.
-  // const onChangeHandler = function () {
-  //   calculateAndDisplayRoute(
-  //     directionsRenderer,
-  //     directionsService,
-  //     markerArray,
-  //     stepDisplay,
-  //     map
-  //   );
-  // };
-
-
-  // document.getElementById("start").addEventListener("change", onChangeHandler);
-  // document.getElementById("end").addEventListener("change", onChangeHandler);
 }
 
 $(window).on('load',function()
 {
   navigate_to_location(select_lat,select_lon);
 });
+
 
 function navigate_to_location(sel_lat,sel_long)
 {
@@ -236,3 +199,4 @@ function navigate_to_location(sel_lat,sel_long)
 
   });
 }
+  

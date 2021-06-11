@@ -4,11 +4,13 @@
             <div id="map"></div>
         </div>
         <form id="frm-parkingmap-buttonpanel1" action="/parkingMapRoutesButtonPanel" method="POST">
-            <input id="arrayparking" name="NavArray" type="hidden">
-            <input id="arrayindexselected" name="NavArrayIndex" type="hidden">
+            <input id="bay" name="Bay" type="hidden"  value=<%= bay %> >
+            <input id="slat" name="Slat" type="hidden"  value=<%= slat %> >
+            <input id="slon" name="Slon" type="hidden"  value=<%= slon %> >
+            <input id="username" name="Username" type="hidden" value=<%= username %>>
             <div class="navbuttonpanel">
                 <button id="btn-viewme" class="waves-effect waves-light btn center" name="Viewme" value="viewme" type="button">Recenter Your Location</button>
-                <button id="btn-backdash" class="waves-effect waves-light btn center" name="Dashboard" value="dashboard" type="submit">Dashboard</button>
+                <button id="btn-backdash" class="waves-effect waves-light btn center" name="Dashboard" value="dashboard" type="submit" >Dashboard</button>
             </div>
         </form>
     </div>
@@ -31,8 +33,15 @@
                         onclick="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Time has to be atleast one minute')"  value=<%= timer %>>
                     </div>  
                 </div>
+                <input id="history_bay" name="Bay" type="hidden"  value=<%= bay %> >
+                <input id="history_slat" name="Slat" type="hidden"  value=<%= slat %> >
+                <input id="history_slon" name="Slon" type="hidden"  value=<%= slon %> >
+                <input id="history_username" name="Username" type="hidden" value=<%= username %>>
+                <input id="save-history" name="SaveHistory" type="checkbox" checked>
+                <label id="lbl-save-history" for="save-history">Save Parking Information</label>
                 <button id="btn-notify" class="waves-effect waves-light btn center"  name="Notify" value="notify" type="submit">Notify Me</button>
             </form>
+            
         </div>         
       
     </div>

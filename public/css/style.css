@@ -349,7 +349,7 @@ header .header-btn{
 }
 
 .navlistpanel{
-    height: 320px;
+    height: 293px;
     width: 100%;
     display: block;
     float: left;
@@ -490,8 +490,17 @@ table {
 }
 
 #btn-notify{
-	width:100%;
-	height: 30px;
+	width:40%;
+	height: 50px;
+}
+#lbl-save-history{
+	margin-top: 5px;
+	width:45%;
+}
+#save-history{
+    margin-top: 15px;
+    width: 10%;
+    margin-left: 3px;
 }
 
 #time{
