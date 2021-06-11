@@ -120,7 +120,7 @@ function initMap() {
 
   // get updated available parking
   getUpdatedAvailableParkingData = function(){
- 
+    // Fetching Parking data from the ajax server
     $.ajax({
       url: '/getAllAvailableParkingData',
       method: "GET",
@@ -145,8 +145,7 @@ $(window).on('load',function()
 {
   navigate_to_location(select_lat,select_lon);
 });
-
-
+//navigation
 function navigate_to_location(sel_lat,sel_long)
 {
   var start=new google.maps.LatLng(parseFloat(userLat),parseFloat(userLong));
@@ -169,10 +168,10 @@ function navigate_to_location(sel_lat,sel_long)
     {
       directionsDisplay.setDirections(response);
       directionsDisplay.setMap(map);
-      getRoute = response.routes[0].legs[0];
+      getRoute = response.routes[0].legs[0]; //get current route from response 
       //console.log(getRoutes);
       //console.log(routes.steps[i].instructions);
-      
+//display step by step directions to user inside the map 
     var navigateHTML="<div id='history_info' style='width: 100%;height:100%;overflow-y:auto'><table class='table table-striped'><tr><th>Your Steps</th></tr>";
       navigateHTML+="<tr>";
       navigateHTML+="<td>"+'Distance '+getRoute.distance.text+' '+'Duration '+getRoute.duration.text+' ';
@@ -189,14 +188,12 @@ function navigate_to_location(sel_lat,sel_long)
     console.log(getRoute);
 
     getRoute.steps.instructions+="</table></div>"
-    document.getElementById("navigate_data").innerHTML=navigateHTML;
-
-    }
+    document.getElementById("navigate_data").innerHTML=navigateHTML;}
     else
     {
       console.log("Direction request failed:"+status);
     }
-
+    
   });
 }
   

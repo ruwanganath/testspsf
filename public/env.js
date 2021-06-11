@@ -69,6 +69,8 @@ $(document).ready(function () {
     map.panTo({ lat: parseFloat(mapLat), lng: parseFloat(mapLong)}) 
   }); 
 
+
+  // Hidden fields to store the lattitude and the longitude of the selected parking bay
   $("#sel_lat").val(mapLat);
   $("#sel_lon").val(mapLong);
 

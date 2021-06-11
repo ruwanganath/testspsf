@@ -1,5 +1,5 @@
 const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const GoogleStrategy = require('passport-google-oauth20').Strategy; //google passport strategy 
 //user model 
 //const User = require('../models/googleStore');
 //const findOrCreate = require("mongoose-findorcreate");
@@ -11,14 +11,15 @@ passport.use(new GoogleStrategy({
     passReqToCallback: true
   },
   function(request, accessToken, refreshToken, profile, done) {
-    return done(null, profile);
+    return done(null, profile); //request profile 
   }
 ));
 
-passport.serializeUser((user, done) => {
+passport.serializeUser((user, done) => { //serialize user 
     done(null, user);
 })
 
+//deserialize user 
 passport.deserializeUser(function(user, done) {
     done(null, user);
 });
